@@ -99,44 +99,28 @@ This project analyzes Citi Bike trip data around Columbia University (Morningsid
 
 ## Getting Started
 
-### Prerequisites
-
-Python 3.9+ with the following packages:
-
-- pandas
-- jupyter
-- plotly
-- numpy
-
-### Installation
-
 1. Clone the repository:
-
 ```bash
-git clone <repository-url>
+git clone https://github.com/andrewsuh98/da-project-citibike
 cd da-project-citibike
 ```
 
-2. Install dependencies:
+2. Create and activate virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Download Citi Bike data:
-
-- Visit [Citi Bike System Data](https://citibikenyc.com/system-data)
-- Download monthly trip data files
-- Place in `data/` directory
-
-4. Run the data loading notebook:
-
-```bash
-jupyter notebook notebooks/load_and_filter_citibike_data.ipynb
-```
+4. Download data files:
+- The filtered dataset (`columbia_filtered_citibike.csv`) will be provided via cloud drive link
+- Place the file in the `data/` directory
 
 5. Start analyzing:
-
 ```bash
 jupyter notebook notebooks/example.ipynb
 ```
@@ -147,7 +131,7 @@ jupyter notebook notebooks/example.ipynb
 
 **Note:** Raw data files are not tracked in this repository due to size (~15GB total).
 
-The filtered dataset (`columbia_filtered_citibike.csv`) contains only trips involving Columbia area stations and is significantly smaller (~52MB, 529K rows).
+The filtered dataset (`columbia_filtered_citibike.csv`) will be shared via cloud drive link and contains only trips involving Columbia area stations (~52MB, 529K rows).
 
 ---
 
@@ -168,22 +152,3 @@ The filtered dataset (`columbia_filtered_citibike.csv`) contains only trips invo
    - Academic calendar event impact
    - Station capacity modeling
    - Rebalancing optimization
-
----
-
-## Contributing
-
-This is a research project. For questions or collaboration opportunities, please open an issue.
-
----
-
-## License
-
-Data provided by Citi Bike NYC. Analysis and code in this repository are for educational and research purposes.
-
----
-
-## Acknowledgments
-
-- **Citi Bike NYC** for providing open system data
-- **Columbia University** for geographic context and academic calendar data
