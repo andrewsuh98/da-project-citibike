@@ -47,3 +47,6 @@ data/*
 
 # environment variables
 .env
+
+# claude settings
+.claude/
