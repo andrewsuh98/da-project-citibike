@@ -44,3 +44,6 @@ Thumbs.db
 # Data files - ignore all contents in data/ directory
 data/*
 !data/.gitkeep
+
+# environment variables
+.env
