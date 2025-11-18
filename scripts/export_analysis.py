@@ -1,6 +1,6 @@
 """
-Export sample visualizations from temporal patterns analysis to JSON format.
-This script generates 3 sample charts for the MVP website.
+Export visualizations from temporal patterns analysis to JSON format.
+This script generates all charts for the website.
 """
 
 import pandas as pd
@@ -24,6 +24,36 @@ df = df[(df['trip_duration_minutes'] >= 1) & (df['trip_duration_minutes'] <= 180
 df['hour_of_day'] = df['started_at'].dt.hour
 df['day_of_week'] = df['started_at'].dt.dayofweek
 df['day_name'] = df['started_at'].dt.day_name()
+df['month'] = df['started_at'].dt.month
+df['month_name'] = df['started_at'].dt.strftime('%Y-%m')
+df['date'] = df['started_at'].dt.date
+df['is_weekend'] = df['day_of_week'] >= 5
+
+# Season mapping
+def get_season(month):
+	if month in [12, 1, 2]:
+		return 'Winter'
+	elif month in [3, 4, 5]:
+		return 'Spring'
+	elif month in [6, 7, 8]:
+		return 'Summer'
+	else:
+		return 'Fall'
+
+df['season'] = df['month'].apply(get_season)
+
+# Time period categorization
+def get_time_period(hour):
+	if 6 <= hour < 10:
+		return 'Morning Rush'
+	elif 10 <= hour < 16:
+		return 'Midday'
+	elif 16 <= hour < 20:
+		return 'Evening Rush'
+	else:
+		return 'Night'
+
+df['time_period'] = df['hour_of_day'].apply(get_time_period)
 
 print(f"Processing {len(df):,} trips after filtering")
 
@@ -121,7 +151,191 @@ with open(output_dir / 'summary_stats.json', 'w') as f:
 
 print(f"✓ Saved summary_stats.json")
 
-print(f"\n✅ Export complete! Generated 3 files in {output_dir}")
+# 4. Member vs Casual hourly patterns
+print("Generating member vs casual hourly patterns...")
+hourly_by_type = df.groupby(['hour_of_day', 'member_casual']).size().reset_index(name='trip_count')
+
+fig_member_casual = px.line(
+	hourly_by_type,
+	x='hour_of_day',
+	y='trip_count',
+	color='member_casual',
+	title='Hourly Usage Patterns: Member vs Casual Users',
+	labels={'hour_of_day': 'Hour of Day', 'trip_count': 'Number of Trips', 'member_casual': 'User Type'},
+	markers=True
+)
+
+fig_member_casual.update_layout(
+	height=400,
+	hovermode='x unified',
+	xaxis=dict(tickmode='linear', tick0=0, dtick=2)
+)
+
+with open(output_dir / 'member_casual_hourly.json', 'w') as f:
+	json.dump(fig_member_casual.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print(f"✓ Saved member_casual_hourly.json")
+
+# 5. Weekday vs Weekend by User Type
+print("Generating weekday vs weekend by user type...")
+day_type_user = df.groupby(['is_weekend', 'member_casual']).size().reset_index(name='trip_count')
+day_type_user['day_type'] = day_type_user['is_weekend'].map({False: 'Weekday', True: 'Weekend'})
+
+fig_day_user = px.bar(
+	day_type_user,
+	x='day_type',
+	y='trip_count',
+	color='member_casual',
+	title='User Type Distribution: Weekday vs Weekend',
+	labels={'day_type': 'Day Type', 'trip_count': 'Number of Trips', 'member_casual': 'User Type'},
+	barmode='group'
+)
+
+fig_day_user.update_layout(height=400)
+
+with open(output_dir / 'weekday_weekend_by_user.json', 'w') as f:
+	json.dump(fig_day_user.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print(f"✓ Saved weekday_weekend_by_user.json")
+
+# 6. Day of Week
+print("Generating day of week chart...")
+day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+day_counts = df['day_name'].value_counts().reindex(day_order)
+
+fig_day_week = px.bar(
+	x=day_counts.index,
+	y=day_counts.values,
+	title='Total Trips by Day of Week',
+	labels={'x': 'Day of Week', 'y': 'Number of Trips'},
+	color_discrete_sequence=['#0070f3']
+)
+
+fig_day_week.update_layout(height=400)
+
+with open(output_dir / 'day_of_week.json', 'w') as f:
+	json.dump(fig_day_week.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print(f"✓ Saved day_of_week.json")
+
+# 7. Time Period Distribution
+print("Generating time period distribution...")
+time_period_counts = df['time_period'].value_counts().reindex(
+	['Morning Rush', 'Midday', 'Evening Rush', 'Night']
+)
+
+fig_time_period = px.bar(
+	x=time_period_counts.index,
+	y=time_period_counts.values,
+	title='Trips by Time Period',
+	labels={'x': 'Time Period', 'y': 'Number of Trips'},
+	color_discrete_sequence=['#0070f3']
+)
+
+fig_time_period.update_layout(height=400)
+
+with open(output_dir / 'time_period.json', 'w') as f:
+	json.dump(fig_time_period.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print(f"✓ Saved time_period.json")
+
+# 8. Monthly Time Series
+print("Generating monthly time series...")
+monthly_trips = df.groupby('month_name').size().reset_index(name='trip_count')
+monthly_trips = monthly_trips.sort_values('month_name')
+
+fig_monthly = px.line(
+	monthly_trips,
+	x='month_name',
+	y='trip_count',
+	title='Monthly Trip Totals (Jan 2024 - Oct 2025)',
+	labels={'month_name': 'Month', 'trip_count': 'Number of Trips'},
+	markers=True
+)
+
+fig_monthly.update_layout(
+	height=500,
+	hovermode='x unified',
+	xaxis=dict(
+		tickangle=-45,
+		tickmode='array',
+		tickvals=monthly_trips['month_name'].tolist(),
+		ticktext=monthly_trips['month_name'].tolist()
+	)
+)
+
+with open(output_dir / 'monthly_timeseries.json', 'w') as f:
+	json.dump(fig_monthly.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print(f"✓ Saved monthly_timeseries.json")
+
+# 9. Seasonal Comparison
+print("Generating seasonal comparison...")
+from plotly.subplots import make_subplots
+
+season_order = ['Winter', 'Spring', 'Summer', 'Fall']
+seasonal_trips = df.groupby('season').size().reindex(season_order)
+season_months = df.groupby('season')['month_name'].nunique().reindex(season_order)
+avg_trips_per_month = seasonal_trips / season_months
+
+fig_seasonal = make_subplots(
+	rows=1, cols=2,
+	subplot_titles=('Total Trips by Season', 'Average Trips per Month')
+)
+
+fig_seasonal.add_trace(
+	go.Bar(x=seasonal_trips.index.tolist(), y=seasonal_trips.values.tolist(), name='Total', marker_color='#0070f3'),
+	row=1, col=1
+)
+
+fig_seasonal.add_trace(
+	go.Bar(x=avg_trips_per_month.index.tolist(), y=avg_trips_per_month.values.tolist(), name='Average', marker_color='#0070f3'),
+	row=1, col=2
+)
+
+fig_seasonal.update_layout(height=400, title_text='Seasonal Patterns', showlegend=False)
+fig_seasonal.update_yaxes(title_text='Number of Trips', row=1, col=1)
+fig_seasonal.update_yaxes(title_text='Avg Trips per Month', row=1, col=2)
+
+with open(output_dir / 'seasonal_comparison.json', 'w') as f:
+	json.dump(fig_seasonal.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print(f"✓ Saved seasonal_comparison.json")
+
+# 10. Seasonal Hourly Patterns
+print("Generating seasonal hourly patterns...")
+season_hour = df.groupby(['season', 'hour_of_day']).size().reset_index(name='trip_count')
+
+fig_season_hour = px.line(
+	season_hour,
+	x='hour_of_day',
+	y='trip_count',
+	color='season',
+	category_orders={'season': season_order},
+	title='Hourly Patterns by Season',
+	labels={'hour_of_day': 'Hour of Day', 'trip_count': 'Number of Trips', 'season': 'Season'},
+	markers=True
+)
+
+fig_season_hour.update_layout(
+	height=500,
+	hovermode='x unified',
+	xaxis=dict(tickmode='linear', tick0=0, dtick=2)
+)
+
+with open(output_dir / 'seasonal_hourly.json', 'w') as f:
+	json.dump(fig_season_hour.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print(f"✓ Saved seasonal_hourly.json")
+
+print(f"\n✅ Export complete! Generated 10 files in {output_dir}")
 print(f"   - hourly_trips.json")
 print(f"   - day_hour_heatmap.json")
 print(f"   - summary_stats.json")
+print(f"   - member_casual_hourly.json")
+print(f"   - weekday_weekend_by_user.json")
+print(f"   - day_of_week.json")
+print(f"   - time_period.json")
+print(f"   - monthly_timeseries.json")
+print(f"   - seasonal_comparison.json")
+print(f"   - seasonal_hourly.json")
