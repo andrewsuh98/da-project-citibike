@@ -19,7 +19,7 @@ STATION_INFORMATION_URL = f"{GBFS_BASE_URL}/station_information.json"
 STATION_STATUS_URL = f"{GBFS_BASE_URL}/station_status.json"
 
 # Cache settings
-CACHE_TTL_SECONDS = 300  # 5 minutes
+CACHE_TTL_SECONDS = 180  # 3 minutes
 
 # CORS settings
 ALLOWED_ORIGINS = [

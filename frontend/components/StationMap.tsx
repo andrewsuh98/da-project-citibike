@@ -39,13 +39,35 @@ const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.j
 
 export default function StationMap({ stations }: StationMapProps) {
 	const [mounted, setMounted] = useState(false);
+	const [webGLSupported, setWebGLSupported] = useState(true);
 
 	useEffect(() => {
+		// Check for WebGL support
+		try {
+			const canvas = document.createElement('canvas');
+			const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+			if (!gl) {
+				setWebGLSupported(false);
+			}
+		} catch (e) {
+			setWebGLSupported(false);
+		}
 		setMounted(true);
 	}, []);
 
 	if (!mounted) {
 		return <div className="w-full h-[500px] bg-gray-100 rounded-lg animate-pulse" />;
+	}
+
+	if (!webGLSupported) {
+		return (
+			<div className="w-full h-[500px] bg-gray-100 rounded-lg flex items-center justify-center">
+				<div className="text-center text-gray-600">
+					<p className="text-lg font-semibold mb-2">Map visualization unavailable</p>
+					<p className="text-sm">Your browser does not support WebGL</p>
+				</div>
+			</div>
+		);
 	}
 
 	// Helper function to get color based on availability
@@ -62,32 +84,39 @@ export default function StationMap({ stations }: StationMapProps) {
 		return [34, 197, 94]; // green
 	};
 
-	const layer = new ScatterplotLayer({
-		id: 'stations',
-		data: stations,
-		pickable: true,
-		opacity: 0.8,
-		stroked: true,
-		filled: true,
-		radiusScale: 1,
-		radiusMinPixels: 8,
-		radiusMaxPixels: 20,
-		lineWidthMinPixels: 2,
-		getPosition: (d: StationData) => [d.lon, d.lat],
-		getRadius: (d: StationData) => Math.sqrt(d.capacity) * 3,
-		getFillColor: (d: StationData) => getStationColor(d),
-		getLineColor: [255, 255, 255],
-		updateTriggers: {
-			getFillColor: stations.map(s => s.num_bikes_available).join(',')
-		}
-	});
+	const layers = [
+		new ScatterplotLayer({
+			id: 'stations',
+			data: stations,
+			pickable: true,
+			opacity: 0.8,
+			stroked: true,
+			filled: true,
+			radiusScale: 1,
+			radiusMinPixels: 8,
+			radiusMaxPixels: 20,
+			lineWidthMinPixels: 2,
+			getPosition: (d: StationData) => [d.lon, d.lat],
+			getRadius: (d: StationData) => Math.sqrt(d.capacity) * 3,
+			getFillColor: (d: StationData) => getStationColor(d),
+			getLineColor: [255, 255, 255],
+			updateTriggers: {
+				getFillColor: stations.map(s => s.num_bikes_available).join(',')
+			}
+		})
+	];
 
 	return (
-		<div className="w-full h-[500px] rounded-lg overflow-hidden shadow-lg">
+		<div className="w-full h-[500px] rounded-lg overflow-hidden shadow-lg relative">
 			<DeckGL
 				initialViewState={INITIAL_VIEW_STATE}
 				controller={true}
-				layers={[layer]}
+				layers={layers}
+				style={{ position: 'relative', width: '100%', height: '100%' }}
+				_typedArrayManagerProps={{
+					overAlloc: 1,
+					poolSize: 0
+				}}
 				getTooltip={({ object }: { object?: StationData }) => {
 					if (!object) return null;
 					return {
@@ -115,6 +144,7 @@ export default function StationMap({ stations }: StationMapProps) {
 					mapLib={import('maplibre-gl')}
 					mapStyle={MAP_STYLE}
 					reuseMaps
+					style={{ width: '100%', height: '100%' }}
 				/>
 			</DeckGL>
 		</div>

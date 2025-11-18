@@ -38,14 +38,14 @@ interface StatusResponse {
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const REFRESH_INTERVAL = 3 * 60 * 1000; // 3 minutes
 
 export default function LiveStatusPage() {
 	const [data, setData] = useState<StatusResponse | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [lastFetch, setLastFetch] = useState<Date | null>(null);
-	const [secondsUntilRefresh, setSecondsUntilRefresh] = useState(300);
+	const [secondsUntilRefresh, setSecondsUntilRefresh] = useState(180);
 
 	const fetchData = async () => {
 		try {
@@ -60,7 +60,7 @@ export default function LiveStatusPage() {
 			const json = await response.json();
 			setData(json);
 			setLastFetch(new Date());
-			setSecondsUntilRefresh(300);
+			setSecondsUntilRefresh(180);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to fetch data');
 			console.error('Error fetching station data:', err);
@@ -83,7 +83,7 @@ export default function LiveStatusPage() {
 	// Countdown timer
 	useEffect(() => {
 		const countdownTimer = setInterval(() => {
-			setSecondsUntilRefresh((prev) => (prev > 0 ? prev - 1 : 300));
+			setSecondsUntilRefresh((prev) => (prev > 0 ? prev - 1 : 180));
 		}, 1000);
 
 		return () => clearInterval(countdownTimer);
@@ -191,15 +191,8 @@ export default function LiveStatusPage() {
 							Last updated: {lastFetch ? lastFetch.toLocaleTimeString() : 'N/A'}
 						</div>
 						<div>
-							Next refresh in: {Math.floor(secondsUntilRefresh / 60)}:{String(secondsUntilRefresh % 60).padStart(2, '0')}
+							Auto-refresh in: {Math.floor(secondsUntilRefresh / 60)}:{String(secondsUntilRefresh % 60).padStart(2, '0')}
 						</div>
-						<button
-							onClick={fetchData}
-							disabled={loading}
-							className="bg-primary text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors disabled:opacity-50"
-						>
-							{loading ? 'Refreshing...' : 'Refresh Now'}
-						</button>
 					</div>
 				</div>
 			)}
@@ -208,7 +201,7 @@ export default function LiveStatusPage() {
 			<div className="bg-blue-50 border-l-4 border-primary rounded-r-lg p-4 mb-8">
 				<p className="text-sm text-gray-700">
 					<strong>Data Source:</strong> Citi Bike General Bikeshare Feed Specification (GBFS) API.
-					Data updates automatically every 5 minutes.
+					Data updates automatically every 3 minutes.
 				</p>
 			</div>
 
