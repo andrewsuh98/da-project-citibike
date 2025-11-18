@@ -1,6 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+
+const StationMap = dynamic(() => import('@/components/StationMap'), {
+	ssr: false,
+	loading: () => <div className="w-full h-[500px] bg-gray-100 rounded-lg animate-pulse" />
+});
 
 interface StationData {
 	station_id: string;
@@ -206,9 +212,37 @@ export default function LiveStatusPage() {
 				</p>
 			</div>
 
+			{/* Station Map */}
+			{data && (
+				<div className="mb-8">
+					<h2 className="text-2xl font-bold text-gray-900 mb-4">Station Map</h2>
+					<StationMap stations={data.stations} />
+					<div className="mt-4 flex items-center justify-center gap-6 text-sm">
+						<div className="flex items-center gap-2">
+							<div className="w-4 h-4 rounded-full bg-green-500"></div>
+							<span className="text-gray-600">Available (&gt;30%)</span>
+						</div>
+						<div className="flex items-center gap-2">
+							<div className="w-4 h-4 rounded-full bg-yellow-500"></div>
+							<span className="text-gray-600">Low (10-30%)</span>
+						</div>
+						<div className="flex items-center gap-2">
+							<div className="w-4 h-4 rounded-full bg-red-500"></div>
+							<span className="text-gray-600">Empty (0%)</span>
+						</div>
+						<div className="flex items-center gap-2">
+							<div className="w-4 h-4 rounded-full bg-gray-400"></div>
+							<span className="text-gray-600">Offline</span>
+						</div>
+					</div>
+				</div>
+			)}
+
 			{/* Station Cards Grid */}
 			{data && (
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<div>
+					<h2 className="text-2xl font-bold text-gray-900 mb-4">Station Details</h2>
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 					{data.stations.map((station) => {
 						const statusColor = getStatusColor(station);
 						const statusLabel = getStatusLabel(station);
@@ -288,6 +322,7 @@ export default function LiveStatusPage() {
 							</div>
 						);
 					})}
+					</div>
 				</div>
 			)}
 
