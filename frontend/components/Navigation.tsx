@@ -31,6 +31,12 @@ export default function Navigation() {
 						>
 							Live Status
 						</Link>
+						<Link
+							href="/about"
+							className="text-gray-700 hover:text-primary transition-colors"
+						>
+							About
+						</Link>
 						<a
 							href="https://github.com/andrewsuh98/da-project-citibike"
 							target="_blank"
