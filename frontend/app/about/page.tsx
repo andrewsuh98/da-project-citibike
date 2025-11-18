@@ -4,8 +4,11 @@ export default function AboutPage() {
 			{/* Page Header */}
 			<div className="text-center mb-12">
 				<h1 className="text-4xl font-bold text-gray-900 mb-4">About the Project</h1>
-				<p className="text-xl text-gray-600 max-w-3xl mx-auto">
+				<p className="text-xl text-gray-600 max-w-3xl mx-auto mb-2">
 					A data analysis project studying Citi Bike usage patterns around Columbia University
+				</p>
+				<p className="text-lg text-gray-500">
+					Columbia Business School - MS in Business Analytics - Data Analytics Course
 				</p>
 			</div>
 
@@ -13,65 +16,65 @@ export default function AboutPage() {
 			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
 				<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Project Team</h2>
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-					{/* Team Member 1 */}
+					{/* Andrew Suh */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
 						<div className="w-20 h-20 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-							M1
+							AS
 						</div>
-						<h3 className="text-lg font-semibold text-gray-900 mb-2">Team Member 1</h3>
-						<p className="text-sm text-gray-600 mb-3">Role / Focus Area</p>
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Andrew Suh</h3>
+						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
+						<div className="flex justify-center gap-3 text-sm">
+							<a href="https://github.com/andrewsuh98" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">GitHub</a>
+							<a href="#" className="text-primary hover:underline">LinkedIn</a>
+						</div>
+					</div>
+
+					{/* Afroditi Fragkiadaki */}
+					<div className="bg-gray-50 rounded-lg p-6 text-center">
+						<div className="w-20 h-20 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+							AF
+						</div>
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Afroditi Fragkiadaki</h3>
+						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
 						<div className="flex justify-center gap-3 text-sm">
 							<a href="#" className="text-primary hover:underline">GitHub</a>
 							<a href="#" className="text-primary hover:underline">LinkedIn</a>
 						</div>
 					</div>
 
-					{/* Team Member 2 */}
+					{/* Lexi Liu */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
 						<div className="w-20 h-20 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-							M2
+							LL
 						</div>
-						<h3 className="text-lg font-semibold text-gray-900 mb-2">Team Member 2</h3>
-						<p className="text-sm text-gray-600 mb-3">Role / Focus Area</p>
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Lexi Liu</h3>
+						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
 						<div className="flex justify-center gap-3 text-sm">
 							<a href="#" className="text-primary hover:underline">GitHub</a>
 							<a href="#" className="text-primary hover:underline">LinkedIn</a>
 						</div>
 					</div>
 
-					{/* Team Member 3 */}
+					{/* Naiyapak Boondee */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
 						<div className="w-20 h-20 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-							M3
+							NB
 						</div>
-						<h3 className="text-lg font-semibold text-gray-900 mb-2">Team Member 3</h3>
-						<p className="text-sm text-gray-600 mb-3">Role / Focus Area</p>
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Naiyapak Boondee</h3>
+						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
 						<div className="flex justify-center gap-3 text-sm">
 							<a href="#" className="text-primary hover:underline">GitHub</a>
 							<a href="#" className="text-primary hover:underline">LinkedIn</a>
 						</div>
 					</div>
 
-					{/* Team Member 4 */}
+					{/* Zicheng Ni */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
 						<div className="w-20 h-20 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-							M4
+							ZN
 						</div>
-						<h3 className="text-lg font-semibold text-gray-900 mb-2">Team Member 4</h3>
-						<p className="text-sm text-gray-600 mb-3">Role / Focus Area</p>
-						<div className="flex justify-center gap-3 text-sm">
-							<a href="#" className="text-primary hover:underline">GitHub</a>
-							<a href="#" className="text-primary hover:underline">LinkedIn</a>
-						</div>
-					</div>
-
-					{/* Team Member 5 */}
-					<div className="bg-gray-50 rounded-lg p-6 text-center">
-						<div className="w-20 h-20 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-							M5
-						</div>
-						<h3 className="text-lg font-semibold text-gray-900 mb-2">Team Member 5</h3>
-						<p className="text-sm text-gray-600 mb-3">Role / Focus Area</p>
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Zicheng Ni</h3>
+						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
 						<div className="flex justify-center gap-3 text-sm">
 							<a href="#" className="text-primary hover:underline">GitHub</a>
 							<a href="#" className="text-primary hover:underline">LinkedIn</a>
