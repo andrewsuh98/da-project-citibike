@@ -25,7 +25,7 @@ export default function AboutPage() {
 						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
 						<div className="flex justify-center gap-3 text-sm">
 							<a href="https://github.com/andrewsuh98" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">GitHub</a>
-							<a href="#" className="text-primary hover:underline">LinkedIn</a>
+							<a href="https://www.linkedin.com/in/andrewwsuh" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">LinkedIn</a>
 						</div>
 					</div>
 
