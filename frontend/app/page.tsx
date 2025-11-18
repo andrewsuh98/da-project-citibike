@@ -34,35 +34,38 @@ export default async function Home() {
 					<div className="text-3xl font-bold text-gray-900">
 						{summaryStats.total_trips.toLocaleString()}
 					</div>
-				</div>
-
-				<div className="bg-white rounded-lg shadow p-6">
-					<div className="text-sm font-medium text-gray-500 mb-2">Date Range</div>
-					<div className="text-lg font-bold text-gray-900">
-						{summaryStats.total_days} days
-					</div>
 					<div className="text-sm text-gray-600 mt-1">
-						{summaryStats.avg_trips_per_day} avg/day
+						{summaryStats.date_range.start} to {summaryStats.date_range.end}
 					</div>
 				</div>
 
 				<div className="bg-white rounded-lg shadow p-6">
-					<div className="text-sm font-medium text-gray-500 mb-2">Member Users</div>
+					<div className="text-sm font-medium text-gray-500 mb-2">Peak Hour</div>
 					<div className="text-3xl font-bold text-gray-900">
-						{summaryStats.user_distribution.member_percentage}%
+						{summaryStats.peak_hour === 0 ? '12 AM' : summaryStats.peak_hour < 12 ? `${summaryStats.peak_hour} AM` : summaryStats.peak_hour === 12 ? '12 PM' : `${summaryStats.peak_hour - 12} PM`}
 					</div>
 					<div className="text-sm text-gray-600 mt-1">
-						{summaryStats.user_distribution.member.toLocaleString()} trips
+						{summaryStats.peak_hour_trips.toLocaleString()} trips
 					</div>
 				</div>
 
 				<div className="bg-white rounded-lg shadow p-6">
-					<div className="text-sm font-medium text-gray-500 mb-2">Electric Bikes</div>
+					<div className="text-sm font-medium text-gray-500 mb-2">Median Trip</div>
 					<div className="text-3xl font-bold text-gray-900">
-						{summaryStats.bike_distribution.electric_percentage}%
+						{summaryStats.trip_duration.median_minutes} min
 					</div>
 					<div className="text-sm text-gray-600 mt-1">
-						{summaryStats.bike_distribution.electric_bike.toLocaleString()} trips
+						Typical ride duration
+					</div>
+				</div>
+
+				<div className="bg-white rounded-lg shadow p-6">
+					<div className="text-sm font-medium text-gray-500 mb-2">Longest Distance</div>
+					<div className="text-3xl font-bold text-gray-900">
+						{summaryStats.trip_distance.max_miles} mi
+					</div>
+					<div className="text-sm text-gray-600 mt-1">
+						5 Ave & 67 St →<br />Broadway & W 122 St
 					</div>
 				</div>
 			</div>

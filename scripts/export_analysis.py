@@ -16,9 +16,12 @@ df = pd.read_csv(data_path, parse_dates=['started_at', 'ended_at'])
 
 print(f"Loaded {len(df):,} trips")
 
-# Filter outliers: remove trips < 1 minute or > 180 minutes
+# Calculate trip duration
 df['trip_duration_minutes'] = (df['ended_at'] - df['started_at']).dt.total_seconds() / 60
-df = df[(df['trip_duration_minutes'] >= 1) & (df['trip_duration_minutes'] <= 180)]
+
+# Filter out trips with no end station and negative durations
+df = df[~df["end_station_id"].isna()]
+df = df[df['trip_duration_minutes'] > 0]
 
 # Extract temporal features
 df['hour_of_day'] = df['started_at'].dt.hour
@@ -118,6 +121,26 @@ print(f"✓ Saved day_hour_heatmap.json")
 print("Generating summary statistics...")
 total_days = (df['started_at'].max() - df['started_at'].min()).days + 1
 
+# Calculate distance using haversine formula
+import numpy as np
+
+def haversine_distance(lat1, lon1, lat2, lon2):
+	R = 6371  # Earth radius in km
+	lat1, lon1, lat2, lon2 = np.radians(lat1), np.radians(lon1), np.radians(lat2), np.radians(lon2)
+	dlat = lat2 - lat1
+	dlon = lon2 - lon1
+	a = np.sin(dlat/2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon/2)**2
+	c = 2 * np.arcsin(np.sqrt(a))
+	return R * c
+
+df['distance_km'] = haversine_distance(
+	df['start_lat'].values, df['start_lng'].values,
+	df['end_lat'].values, df['end_lng'].values
+)
+
+max_duration_minutes = df['trip_duration_minutes'].max()
+max_distance_km = df['distance_km'].max()
+
 summary_stats = {
 	'total_trips': int(len(df)),
 	'date_range': {
@@ -140,7 +163,13 @@ summary_stats = {
 		'median_minutes': round(df['trip_duration_minutes'].median(), 1),
 		'q25_minutes': round(df['trip_duration_minutes'].quantile(0.25), 1),
 		'q75_minutes': round(df['trip_duration_minutes'].quantile(0.75), 1),
-		'mean_minutes': round(df['trip_duration_minutes'].mean(), 1)
+		'mean_minutes': round(df['trip_duration_minutes'].mean(), 1),
+		'max_minutes': round(max_duration_minutes, 1),
+		'max_hours': round(max_duration_minutes / 60, 1)
+	},
+	'trip_distance': {
+		'max_km': round(max_distance_km, 2),
+		'max_miles': round(max_distance_km * 0.621371, 2)
 	},
 	'peak_hour': int(hourly_trips.loc[hourly_trips['trip_count'].idxmax(), 'hour_of_day']),
 	'peak_hour_trips': int(hourly_trips['trip_count'].max())
