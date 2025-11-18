@@ -23,7 +23,7 @@ export default function RootLayout({
 					<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
 						<p>Columbia University Citi Bike Analysis © 2025</p>
 						<p className="text-sm mt-2">
-							Data Source: <a href="https://citibikenyc.com/system-data" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Citi Bike System Data</a>
+							Data Sources: <a href="https://citibikenyc.com/system-data" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Citi Bike System Data</a> | <a href="https://gbfs.citibikenyc.com/gbfs/gbfs.json" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">GBFS Feed</a>
 						</p>
 					</div>
 				</footer>

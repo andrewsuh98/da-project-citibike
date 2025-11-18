@@ -67,39 +67,61 @@ export default async function Home() {
 				</div>
 			</div>
 
-			{/* Project Overview */}
-			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
-				<h2 className="text-2xl font-bold text-gray-900 mb-4">Project Overview</h2>
-				<p className="text-gray-700 mb-4">
-					This project analyzes Citi Bike usage patterns around Columbia University's Morningside Heights
-					and Manhattanville area. The analysis covers 7 stations and reveals insights into:
-				</p>
-				<ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-					<li>Temporal patterns (hourly, daily, and seasonal variations)</li>
-					<li>User behavior differences (members vs casual riders)</li>
-					<li>Peak usage times and commute patterns</li>
-					<li>Bike type preferences (classic vs electric)</li>
-				</ul>
-
-				<div className="bg-gray-50 rounded-lg p-6 mb-6">
-					<h3 className="text-lg font-semibold text-gray-900 mb-3">Columbia University Stations</h3>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-700">
-						<div>• Broadway & W 122 St</div>
-						<div>• Morningside Dr & Amsterdam Ave</div>
-						<div>• W 120 St & Claremont Ave</div>
-						<div>• Amsterdam Ave & W 119 St</div>
-						<div>• W 116 St & Broadway</div>
-						<div>• W 116 St & Amsterdam Ave</div>
-						<div>• W 113 St & Broadway</div>
-					</div>
+			{/* Features Grid */}
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+				{/* Historical Analysis */}
+				<div className="bg-white rounded-lg shadow-lg p-8">
+					<h2 className="text-2xl font-bold text-gray-900 mb-4">Historical Analysis</h2>
+					<p className="text-gray-700 mb-4">
+						Comprehensive analysis of {summaryStats.total_trips.toLocaleString()} trips from {summaryStats.date_range.start} to {summaryStats.date_range.end}.
+					</p>
+					<ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
+						<li>Temporal patterns (hourly, daily, seasonal)</li>
+						<li>User behavior (members vs casual riders)</li>
+						<li>Peak usage times and commute patterns</li>
+						<li>Bike type preferences (classic vs electric)</li>
+					</ul>
+					<Link
+						href="/analysis/temporal-patterns"
+						className="inline-block bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+					>
+						View Historical Analysis →
+					</Link>
 				</div>
 
-				<Link
-					href="/analysis/temporal-patterns"
-					className="inline-block bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors"
-				>
-					View Temporal Patterns Analysis →
-				</Link>
+				{/* Live Status */}
+				<div className="bg-white rounded-lg shadow-lg p-8">
+					<h2 className="text-2xl font-bold text-gray-900 mb-4">Live Station Status</h2>
+					<p className="text-gray-700 mb-4">
+						Real-time availability data for all 7 Columbia area stations, updated every 3 minutes.
+					</p>
+					<ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
+						<li>Current bike availability (classic & e-bike)</li>
+						<li>Available docking spaces</li>
+						<li>Interactive map visualization</li>
+						<li>Station status indicators</li>
+					</ul>
+					<Link
+						href="/live/status"
+						className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
+					>
+						View Live Status →
+					</Link>
+				</div>
+			</div>
+
+			{/* Stations Overview */}
+			<div className="bg-white rounded-lg shadow p-8 mb-12">
+				<h2 className="text-2xl font-bold text-gray-900 mb-4">Columbia University Stations</h2>
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-700">
+					<div>• Broadway & W 122 St</div>
+					<div>• Morningside Dr & Amsterdam Ave</div>
+					<div>• W 120 St & Claremont Ave</div>
+					<div>• Amsterdam Ave & W 119 St</div>
+					<div>• W 116 St & Broadway</div>
+					<div>• W 116 St & Amsterdam Ave</div>
+					<div>• W 113 St & Broadway</div>
+				</div>
 			</div>
 
 			{/* Methodology */}
