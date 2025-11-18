@@ -26,7 +26,7 @@ export default function Navigation() {
 							Analysis
 						</Link>
 						<a
-							href="https://github.com/yourusername/da-project-citibike"
+							href="https://github.com/andrewsuh98/da-project-citibike"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="text-gray-700 hover:text-primary transition-colors"
