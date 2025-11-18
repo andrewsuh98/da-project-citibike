@@ -88,6 +88,8 @@ class GBFSClient:
 			# Calculate percent full
 			capacity = info.get("capacity", 0)
 			bikes_available = status.get("num_bikes_available", 0)
+			ebikes_available = status.get("num_ebikes_available", 0)
+			classic_bikes_available = bikes_available - ebikes_available
 			percent_full = round((bikes_available / capacity * 100), 1) if capacity > 0 else 0
 
 			combined_data = {
@@ -97,6 +99,8 @@ class GBFSClient:
 				"lon": info.get("lon"),
 				"capacity": capacity,
 				"num_bikes_available": bikes_available,
+				"num_ebikes_available": ebikes_available,
+				"num_classic_bikes_available": classic_bikes_available,
 				"num_docks_available": status.get("num_docks_available", 0),
 				"is_installed": status.get("is_installed", 0),
 				"is_renting": status.get("is_renting", 0),

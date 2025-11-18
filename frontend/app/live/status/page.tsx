@@ -9,6 +9,8 @@ interface StationData {
 	lon: number;
 	capacity: number;
 	num_bikes_available: number;
+	num_ebikes_available: number;
+	num_classic_bikes_available: number;
 	num_docks_available: number;
 	is_installed: number;
 	is_renting: number;
@@ -238,9 +240,15 @@ export default function LiveStatusPage() {
 								{/* Bikes and Docks */}
 								<div className="space-y-3 mb-4">
 									<div className="flex items-center justify-between">
-										<span className="text-gray-600">🚲 Bikes:</span>
+										<span className="text-gray-600">🚲 Classic Bikes:</span>
 										<span className="text-2xl font-bold text-gray-900">
-											{station.num_bikes_available}
+											{station.num_classic_bikes_available}
+										</span>
+									</div>
+									<div className="flex items-center justify-between">
+										<span className="text-gray-600">⚡ E-Bikes:</span>
+										<span className="text-2xl font-bold text-gray-900">
+											{station.num_ebikes_available}
 										</span>
 									</div>
 									<div className="flex items-center justify-between">
