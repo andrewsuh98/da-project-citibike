@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import DeckGL from '@deck.gl/react';
-import { ScatterplotLayer } from '@deck.gl/layers';
+import { ScatterplotLayer, TextLayer } from '@deck.gl/layers';
 import { Map } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -28,11 +28,10 @@ interface StationMapProps {
 }
 
 const INITIAL_VIEW_STATE = {
-	longitude: -73.9626,
-	latitude: 40.8075,
-	zoom: 14,
-	pitch: 0,
-	bearing: 0
+	longitude: -73.962433,
+	latitude: 40.808271,
+	zoom: 14.8,
+	pitch: 20
 };
 
 const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
@@ -103,6 +102,24 @@ export default function StationMap({ stations }: StationMapProps) {
 			updateTriggers: {
 				getFillColor: stations.map(s => s.num_bikes_available).join(',')
 			}
+		}),
+		new TextLayer({
+			id: 'columbia-label',
+			data: [{
+				name: 'Columbia University',
+				coordinates: [-73.9626, 40.8075]
+			}],
+			pickable: false,
+			getPosition: (d: any) => d.coordinates,
+			getText: (d: any) => d.name,
+			getSize: 16,
+			getColor: [255, 255, 255],
+			getAngle: 0,
+			getTextAnchor: 'middle',
+			getAlignmentBaseline: 'center',
+			fontFamily: 'Arial, sans-serif',
+			outlineWidth: 2,
+			outlineColor: [0, 0, 0]
 		})
 	];
 
