@@ -136,15 +136,21 @@ export default async function Home() {
 					</p>
 					<p className="mb-4">
 						<strong>Data Processing:</strong> Filtered 529,908 trips where either start or end station
-						is within the Columbia University area. Removed outlier trips (&lt; 1 min or &gt; 180 min).
+						is within the Columbia University area. Removed anomalies and incorrect data.
 					</p>
 					<p className="mb-4">
 						<strong>Analysis Tools:</strong> Python (pandas, plotly), Jupyter notebooks for exploratory analysis,
 						Next.js/React for web visualization
 					</p>
-					<p>
+					<p className="mb-6">
 						<strong>Time Period:</strong> {summaryStats.date_range.start} to {summaryStats.date_range.end} ({summaryStats.total_days} days)
 					</p>
+					<Link
+						href="/methodology"
+						className="inline-block bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors"
+					>
+						View Detailed Methodology →
+					</Link>
 				</div>
 			</div>
 		</div>

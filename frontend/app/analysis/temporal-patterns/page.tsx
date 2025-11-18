@@ -2,6 +2,7 @@ import PlotlyChart from '@/components/PlotlyChart';
 import { PlotlyData, SummaryStats } from '@/lib/types';
 import { promises as fs } from 'fs';
 import path from 'path';
+import Link from 'next/link';
 
 async function loadChartData(filename: string): Promise<PlotlyData> {
 	const filePath = path.join(process.cwd(), 'public/data/temporal', filename);
@@ -385,11 +386,17 @@ export default async function TemporalPatternsPage() {
 			{/* Methodology Note */}
 			<div className="bg-gray-50 rounded-lg p-6">
 				<h3 className="font-semibold text-gray-900 mb-2">Methodology Note</h3>
-				<p className="text-sm text-gray-600">
+				<p className="text-sm text-gray-600 mb-4">
 					Trip duration outliers (&lt; 1 minute or &gt; 180 minutes) were removed to ensure data quality.
 					Analysis uses median values for trip duration due to log-normal distribution.
 					All visualizations are interactive - hover for details, zoom and pan to explore.
 				</p>
+				<Link
+					href="/methodology"
+					className="inline-block bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors"
+				>
+					View Detailed Methodology →
+				</Link>
 			</div>
 		</div>
 	);

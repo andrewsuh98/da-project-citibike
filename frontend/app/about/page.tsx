@@ -8,7 +8,7 @@ export default function AboutPage() {
 					A data analysis project studying Citi Bike usage patterns around Columbia University
 				</p>
 				<p className="text-lg text-gray-500">
-					Columbia Business School - MS in Business Analytics - Data Analytics Course
+					Columbia IEOR - Data Analytics Course
 				</p>
 			</div>
 

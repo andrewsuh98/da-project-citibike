@@ -32,6 +32,12 @@ export default function Navigation() {
 							Live Status
 						</Link>
 						<Link
+							href="/methodology"
+							className="text-gray-700 hover:text-primary transition-colors"
+						>
+							Methodology
+						</Link>
+						<Link
 							href="/about"
 							className="text-gray-700 hover:text-primary transition-colors"
 						>
