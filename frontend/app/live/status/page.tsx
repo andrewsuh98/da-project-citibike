@@ -179,7 +179,7 @@ export default function LiveStatusPage() {
 							</div>
 						</div>
 						<div>
-							<div className="text-sm text-gray-500">Overall Occupancy</div>
+							<div className="text-sm text-gray-500">Overall Availability</div>
 							<div className="text-3xl font-bold text-gray-900">
 								{data.summary.overall_percent_full}%
 							</div>
