@@ -1,0 +1,33 @@
+{
+  "total_trips": 529093,
+  "date_range": {
+    "start": "2024-01-01",
+    "end": "2025-10-31"
+  },
+  "total_days": 670,
+  "avg_trips_per_day": 789.7,
+  "user_distribution": {
+    "member": 435971,
+    "casual": 93122,
+    "member_percentage": 82.4
+  },
+  "bike_distribution": {
+    "classic_bike": 107032,
+    "electric_bike": 422061,
+    "electric_percentage": 79.8
+  },
+  "trip_duration": {
+    "median_minutes": 9.4,
+    "q25_minutes": 5.2,
+    "q75_minutes": 17.6,
+    "mean_minutes": 13.9,
+    "max_minutes": 1472.7,
+    "max_hours": 24.5
+  },
+  "trip_distance": {
+    "max_km": 20.23,
+    "max_miles": 12.57
+  },
+  "peak_hour": 17,
+  "peak_hour_trips": 47217
+}
