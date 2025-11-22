@@ -28,6 +28,9 @@ export default async function TemporalPatternsPage() {
 		monthlyTimeseriesData,
 		seasonalComparisonData,
 		seasonalHourlyData,
+		tripDurationData,
+		userTypeData,
+		bikeTypeData,
 		summaryStats
 	] = await Promise.all([
 		loadChartData('hourly_trips.json'),
@@ -39,6 +42,9 @@ export default async function TemporalPatternsPage() {
 		loadChartData('monthly_timeseries.json'),
 		loadChartData('seasonal_comparison.json'),
 		loadChartData('seasonal_hourly.json'),
+		loadChartData('trip_duration_histogram.json'),
+		loadChartData('user_type_distribution.json'),
+		loadChartData('bike_type_distribution.json'),
 		loadSummaryStats()
 	]);
 
@@ -124,6 +130,70 @@ export default async function TemporalPatternsPage() {
 								</span>
 							</div>
 						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* Trip Characteristics */}
+			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
+				<h2 className="text-2xl font-bold text-gray-900 mb-4">Trip Characteristics</h2>
+				<p className="text-gray-600 mb-6">
+					Understanding trip duration patterns and the distribution of user types and bike types
+					provides insights into how the system is being used.
+				</p>
+
+				{/* User Type and Bike Type Pie Charts */}
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+					<div>
+						<h3 className="text-lg font-semibold text-gray-900 mb-4">User Type Distribution</h3>
+						<PlotlyChart
+							data={userTypeData.data}
+							layout={userTypeData.layout}
+							className="w-full"
+						/>
+						<div className="mt-4 bg-blue-50 rounded-lg p-4">
+							<p className="text-sm text-gray-700">
+								<strong>{summaryStats.user_distribution.member_percentage}% members</strong> vs{' '}
+								{(100 - summaryStats.user_distribution.member_percentage).toFixed(1)}% casual riders.
+								The high member percentage suggests the system is primarily used for regular commuting
+								rather than tourism or occasional use.
+							</p>
+						</div>
+					</div>
+
+					<div>
+						<h3 className="text-lg font-semibold text-gray-900 mb-4">Bike Type Distribution</h3>
+						<PlotlyChart
+							data={bikeTypeData.data}
+							layout={bikeTypeData.layout}
+							className="w-full"
+						/>
+						<div className="mt-4 bg-blue-50 rounded-lg p-4">
+							<p className="text-sm text-gray-700">
+								<strong>{summaryStats.bike_distribution.electric_percentage}% electric bikes</strong> vs{' '}
+								{(100 - summaryStats.bike_distribution.electric_percentage).toFixed(1)}% classic bikes.
+								The strong preference for electric bikes reflects Columbia's hilly terrain and the convenience
+								of e-assist for longer or more strenuous rides.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				{/* Trip Duration Histogram */}
+				<div>
+					<h3 className="text-lg font-semibold text-gray-900 mb-4">Trip Duration Distribution</h3>
+					<PlotlyChart
+						data={tripDurationData.data}
+						layout={tripDurationData.layout}
+						className="w-full"
+					/>
+					<div className="mt-4 bg-blue-50 rounded-lg p-4">
+						<p className="text-sm text-gray-700">
+							<strong>Insight:</strong> The median trip duration is {summaryStats.trip_duration.median_minutes} minutes,
+							with most trips falling between {summaryStats.trip_duration.q25_minutes} and {summaryStats.trip_duration.q75_minutes} minutes.
+							This log-normal distribution is typical of bike-share systems, where most trips are short commutes
+							or errands, with a long tail of longer recreational rides.
+						</p>
 					</div>
 				</div>
 			</div>

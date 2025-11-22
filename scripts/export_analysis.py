@@ -357,7 +357,76 @@ with open(output_dir / 'seasonal_hourly.json', 'w') as f:
 
 print(f"✓ Saved seasonal_hourly.json")
 
-print(f"\n✅ Export complete! Generated 10 files in {output_dir}")
+# 11. Trip Duration Histogram
+print("Generating trip duration histogram...")
+# Filter trips to 1-120 minutes (2 hours)
+duration_filtered = df[(df['trip_duration_minutes'] >= 1) & (df['trip_duration_minutes'] <= 120)]
+
+fig_duration = px.histogram(
+	duration_filtered,
+	x='trip_duration_minutes',
+	nbins=25,  # 5-minute intervals
+	title='Trip Duration Distribution (1-120 minutes)',
+	labels={'trip_duration_minutes': 'Trip Duration (minutes)', 'count': 'Number of Trips'},
+	color_discrete_sequence=['#0070f3']
+)
+
+# Add median line
+median_duration = df['trip_duration_minutes'].median()
+fig_duration.add_vline(
+	x=median_duration,
+	line_dash='dash',
+	line_color='red',
+	annotation_text=f'Median: {median_duration:.1f} min',
+	annotation_position='top right'
+)
+
+fig_duration.update_layout(height=400)
+
+with open(output_dir / 'trip_duration_histogram.json', 'w') as f:
+	json.dump(fig_duration.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print(f"✓ Saved trip_duration_histogram.json")
+
+# 12. User Type Distribution (Pie Chart)
+print("Generating user type distribution pie chart...")
+user_counts = df['member_casual'].value_counts()
+
+fig_user_pie = px.pie(
+	values=user_counts.values,
+	names=user_counts.index,
+	title='User Type Distribution',
+	color_discrete_sequence=['#0070f3', '#ff6b6b']
+)
+
+fig_user_pie.update_traces(textposition='inside', textinfo='percent+label')
+fig_user_pie.update_layout(height=400)
+
+with open(output_dir / 'user_type_distribution.json', 'w') as f:
+	json.dump(fig_user_pie.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print(f"✓ Saved user_type_distribution.json")
+
+# 13. Bike Type Distribution (Pie Chart)
+print("Generating bike type distribution pie chart...")
+bike_counts = df['rideable_type'].value_counts()
+
+fig_bike_pie = px.pie(
+	values=bike_counts.values,
+	names=bike_counts.index,
+	title='Bike Type Distribution',
+	color_discrete_sequence=['#10b981', '#8b5cf6']
+)
+
+fig_bike_pie.update_traces(textposition='inside', textinfo='percent+label')
+fig_bike_pie.update_layout(height=400)
+
+with open(output_dir / 'bike_type_distribution.json', 'w') as f:
+	json.dump(fig_bike_pie.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print(f"✓ Saved bike_type_distribution.json")
+
+print(f"\n✅ Export complete! Generated 13 files in {output_dir}")
 print(f"   - hourly_trips.json")
 print(f"   - day_hour_heatmap.json")
 print(f"   - summary_stats.json")
@@ -368,3 +437,6 @@ print(f"   - time_period.json")
 print(f"   - monthly_timeseries.json")
 print(f"   - seasonal_comparison.json")
 print(f"   - seasonal_hourly.json")
+print(f"   - trip_duration_histogram.json")
+print(f"   - user_type_distribution.json")
+print(f"   - bike_type_distribution.json")
