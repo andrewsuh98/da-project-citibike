@@ -5,6 +5,9 @@ import Navigation from "@/components/Navigation";
 export const metadata: Metadata = {
 	title: "Columbia Citi Bike Analysis",
 	description: "Analysis of Citi Bike usage patterns around Columbia University",
+	icons: {
+		icon: "/images/favicon-crown.png",
+	},
 };
 
 export default function RootLayout({
