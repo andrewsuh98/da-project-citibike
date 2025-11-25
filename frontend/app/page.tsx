@@ -65,7 +65,7 @@ export default async function Home() {
 						{summaryStats.trip_distance.max_miles} mi
 					</div>
 					<div className="text-sm text-gray-600 mt-1">
-						5 Ave & 67 St → Broadway & W 122 St
+						5 Ave & 67 St →<br />Broadway & W 122 St
 					</div>
 				</div>
 			</div>
