@@ -25,4 +25,6 @@ CACHE_TTL_SECONDS = 180  # 3 minutes
 ALLOWED_ORIGINS = [
 	"http://localhost:3000",
 	"https://da-project-citibike.vercel.app",
+	"https://columbiacitibike.com",
+	"https://www.columbiacitibike.com",
 ]
