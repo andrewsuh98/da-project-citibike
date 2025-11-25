@@ -16,11 +16,28 @@ export default function AboutPage() {
 			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
 				<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Project Team</h2>
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+					{/* Afroditi Fragkiadaki */}
+					<div className="bg-gray-50 rounded-lg p-6 text-center">
+						<img
+							src="https://media.licdn.com/dms/image/v2/D4D03AQEKx7ZXcCxOsA/profile-displayphoto-crop_800_800/B4DZnQAZ5sKQAI-/0/1760131391909?e=1765411200&v=beta&t=fiY8Zk_OSVBqIlXlKWlRy88KI5IlMfWqX444Focn53E"
+							alt="Afroditi Fragkiadaki"
+							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+						/>
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Afroditi Fragkiadaki</h3>
+						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
+						<div className="flex justify-center gap-3 text-sm">
+							<a href="https://github.com/afroditifragiadaki" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">GitHub</a>
+							<a href="https://www.linkedin.com/in/aphroditi-fragkiadaki/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">LinkedIn</a>
+						</div>
+					</div>
+
 					{/* Andrew Suh */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
-						<div className="w-20 h-20 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-							AS
-						</div>
+						<img
+							src="https://media.licdn.com/dms/image/v2/D4E03AQF2pUvxIdmfXA/profile-displayphoto-crop_800_800/B4EZmc8oa6HoAI-/0/1759274764279?e=1765411200&v=beta&t=lumsewJRmlYOrzkCM-8UIEKwz9pbz_84OURyBv0uSrU"
+							alt="Andrew Suh"
+							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+						/>
 						<h3 className="text-lg font-semibold text-gray-900 mb-2">Andrew Suh</h3>
 						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
 						<div className="flex justify-center gap-3 text-sm">
@@ -29,55 +46,48 @@ export default function AboutPage() {
 						</div>
 					</div>
 
-					{/* Afroditi Fragkiadaki */}
-					<div className="bg-gray-50 rounded-lg p-6 text-center">
-						<div className="w-20 h-20 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-							AF
-						</div>
-						<h3 className="text-lg font-semibold text-gray-900 mb-2">Afroditi Fragkiadaki</h3>
-						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
-						<div className="flex justify-center gap-3 text-sm">
-							<a href="#" className="text-primary hover:underline">GitHub</a>
-							<a href="#" className="text-primary hover:underline">LinkedIn</a>
-						</div>
-					</div>
-
-					{/* Lexi Liu */}
-					<div className="bg-gray-50 rounded-lg p-6 text-center">
-						<div className="w-20 h-20 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-							LL
-						</div>
-						<h3 className="text-lg font-semibold text-gray-900 mb-2">Lexi Liu</h3>
-						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
-						<div className="flex justify-center gap-3 text-sm">
-							<a href="#" className="text-primary hover:underline">GitHub</a>
-							<a href="#" className="text-primary hover:underline">LinkedIn</a>
-						</div>
-					</div>
-
 					{/* Naiyapak Boondee */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
-						<div className="w-20 h-20 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-							NB
-						</div>
+						<img
+							src="https://media.licdn.com/dms/image/v2/D5603AQFZaXqSUcZ40A/profile-displayphoto-crop_800_800/B56ZnP2VMfG0AI-/0/1760128752618?e=1765411200&v=beta&t=2JyUJt6UzEhNC8i8RzUP18B4qT6d-WMBgnwC3-hnTKs"
+							alt="Naiyapak Boondee"
+							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+						/>
 						<h3 className="text-lg font-semibold text-gray-900 mb-2">Naiyapak Boondee</h3>
 						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
 						<div className="flex justify-center gap-3 text-sm">
-							<a href="#" className="text-primary hover:underline">GitHub</a>
-							<a href="#" className="text-primary hover:underline">LinkedIn</a>
+							<a href="https://github.com/naiyapakeve" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">GitHub</a>
+							<a href="https://www.linkedin.com/in/naiyapakboondee/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">LinkedIn</a>
+						</div>
+					</div>
+
+					{/* Zhesan Liu */}
+					<div className="bg-gray-50 rounded-lg p-6 text-center">
+						<img
+							src="https://media.licdn.com/dms/image/v2/D5635AQF9w03QaA-8oA/profile-framedphoto-shrink_800_800/B56Zc1V4zCHoAg-/0/1748946619900?e=1764612000&v=beta&t=fZPaLLnwFtnpQglDojNf7bFXUdVLos5tY0r3bBcjo7k"
+							alt="Zhesan Liu"
+							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+						/>
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Zhesan Liu</h3>
+						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
+						<div className="flex justify-center gap-3 text-sm">
+							<a href="https://github.com/liuzhesan" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">GitHub</a>
+							<a href="https://www.linkedin.com/in/zhesan-liu/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">LinkedIn</a>
 						</div>
 					</div>
 
 					{/* Zicheng Ni */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
-						<div className="w-20 h-20 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-							ZN
-						</div>
+						<img
+							src="https://media.licdn.com/dms/image/v2/D4E35AQFOca-0JpnrbA/profile-framedphoto-shrink_800_800/B4EZouWcaoKkAg-/0/1761714227111?e=1764612000&v=beta&t=M4s1dhx4U11IHsHu5GsI92kGWSU8DGeacoG1p-FdzYw"
+							alt="Zicheng Ni"
+							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+						/>
 						<h3 className="text-lg font-semibold text-gray-900 mb-2">Zicheng Ni</h3>
 						<p className="text-sm text-gray-600 mb-3">MS in Business Analytics</p>
 						<div className="flex justify-center gap-3 text-sm">
-							<a href="#" className="text-primary hover:underline">GitHub</a>
-							<a href="#" className="text-primary hover:underline">LinkedIn</a>
+							<a href="https://github.com/zichengni" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">GitHub</a>
+							<a href="https://www.linkedin.com/in/zichengni/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">LinkedIn</a>
 						</div>
 					</div>
 				</div>
