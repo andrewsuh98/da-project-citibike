@@ -34,7 +34,7 @@ export default function RootLayout({
 
 						<div className="text-center text-gray-700 mb-4">
 							<p className="text-base font-semibold mb-1">Columbia University Citi Bike Analysis © 2025</p>
-							<p className="text-sm text-gray-600">MS in Business Analytics | IEOR Department</p>
+							<p className="text-sm text-gray-600">MS in Business Analytics  |  IEOR Department</p>
 						</div>
 
 						<div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-gray-600">

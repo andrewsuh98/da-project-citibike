@@ -97,7 +97,7 @@ export default function LiveStatusPage() {
 		if (station.num_bikes_available === 0) {
 			return 'red';
 		}
-		if (station.percent_full < 10) {
+		if (station.percent_full < 30) {
 			return 'yellow';
 		}
 		return 'green';
@@ -108,7 +108,7 @@ export default function LiveStatusPage() {
 		if (!station.is_installed) return 'Offline';
 		if (!station.is_renting) return 'Not Renting';
 		if (station.num_bikes_available === 0) return 'Empty';
-		if (station.percent_full < 10) return 'Low';
+		if (station.percent_full < 30) return 'Low';
 		return 'Available';
 	};
 
@@ -213,11 +213,11 @@ export default function LiveStatusPage() {
 					<div className="mt-4 flex items-center justify-center gap-6 text-sm">
 						<div className="flex items-center gap-2">
 							<div className="w-4 h-4 rounded-full bg-green-500"></div>
-							<span className="text-gray-600">Available (&gt;30%)</span>
+							<span className="text-gray-600">Available (≥30%)</span>
 						</div>
 						<div className="flex items-center gap-2">
 							<div className="w-4 h-4 rounded-full bg-yellow-500"></div>
-							<span className="text-gray-600">Low (10-30%)</span>
+							<span className="text-gray-600">Low (&lt;30%)</span>
 						</div>
 						<div className="flex items-center gap-2">
 							<div className="w-4 h-4 rounded-full bg-red-500"></div>
@@ -236,7 +236,7 @@ export default function LiveStatusPage() {
 				<div>
 					<h2 className="text-2xl font-bold text-gray-900 mb-4">Station Details</h2>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-					{data.stations.map((station) => {
+					{[...data.stations].sort((a, b) => b.percent_full - a.percent_full).map((station) => {
 						const statusColor = getStatusColor(station);
 						const statusLabel = getStatusLabel(station);
 
