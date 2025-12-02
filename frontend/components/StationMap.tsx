@@ -77,7 +77,7 @@ export default function StationMap({ stations }: StationMapProps) {
 		if (station.num_bikes_available === 0) {
 			return [239, 68, 68]; // red
 		}
-		if (station.percent_full < 10) {
+		if (station.percent_full < 30) {
 			return [234, 179, 8]; // yellow
 		}
 		return [34, 197, 94]; // green
