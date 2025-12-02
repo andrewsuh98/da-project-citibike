@@ -596,35 +596,7 @@ with open(output_dir / 'data_split.json', 'w') as f:
 
 print("✓ Saved data_split.json")
 
-# 7. Feature Breakdown
-print("Generating feature breakdown...")
-feature_categories = {
-	'Temporal': 8,
-	'Academic Calendar': 6,
-	'Lag Features': 5,
-	'Rolling Averages': 2,
-	'System-wide': 2,
-	'Historical': 1,
-	'Interaction': 2,
-	'Station Encoding': 1
-}
-
-fig_features = px.pie(
-	values=list(feature_categories.values()),
-	names=list(feature_categories.keys()),
-	title='Feature Distribution by Category (27 total)',
-	color_discrete_sequence=['#0070f3', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899', '#6b7280']
-)
-
-fig_features.update_traces(textposition='inside', textinfo='label+value')
-fig_features.update_layout(height=500, template='plotly_white')
-
-with open(output_dir / 'feature_breakdown.json', 'w') as f:
-	json.dump(fig_features.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
-
-print("✓ Saved feature_breakdown.json")
-
-# 8. Error Distribution
+# 7. Error Distribution
 print("Generating error distribution...")
 residuals = y_test.values - y_pred_xgb
 

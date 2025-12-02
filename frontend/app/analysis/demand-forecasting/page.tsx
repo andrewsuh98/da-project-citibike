@@ -20,7 +20,6 @@ export default async function DemandForecastingPage() {
 	// Load all data
 	const [
 		dataSplitData,
-		featureBreakdownData,
 		modelComparisonData,
 		errorDistributionData,
 		featureImportanceData,
@@ -28,7 +27,6 @@ export default async function DemandForecastingPage() {
 		modelSummary
 	] = await Promise.all([
 		loadChartData('data_split.json'),
-		loadChartData('feature_breakdown.json'),
 		loadChartData('model_comparison.json'),
 		loadChartData('error_distribution.json'),
 		loadChartData('feature_importance.json'),
@@ -132,16 +130,8 @@ export default async function DemandForecastingPage() {
 			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
 				<h2 className="text-2xl font-bold text-gray-900 mb-4">2. Feature Engineering</h2>
 				<p className="text-gray-600 mb-6">
-					Transform raw hourly counts into 27 predictive features that capture temporal patterns, academic calendar effects, and historical trends.
+					Feature engineering transforms raw hourly departure counts into 27 predictive features that capture multiple dimensions of bike demand patterns. Each feature category addresses a specific aspect of what drives demand at Columbia stations.
 				</p>
-
-				<div className="mb-6">
-					<PlotlyChart
-						data={featureBreakdownData.data}
-						layout={featureBreakdownData.layout}
-						className="w-full"
-					/>
-				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 					<div className="bg-gray-50 rounded-lg p-4">
@@ -151,6 +141,7 @@ export default async function DemandForecastingPage() {
 							<li>• Rush hour indicator (7-9am, 4-6pm weekdays)</li>
 							<li>• Weekend flag</li>
 						</ul>
+						<p className="text-xs text-gray-600 mt-2 italic">Captures daily and weekly usage cycles</p>
 					</div>
 
 					<div className="bg-gray-50 rounded-lg p-4">
@@ -160,6 +151,7 @@ export default async function DemandForecastingPage() {
 							<li>• Study days, spring/winter breaks</li>
 							<li>• Days since semester start</li>
 						</ul>
+						<p className="text-xs text-gray-600 mt-2 italic">Columbia-specific seasonal patterns</p>
 					</div>
 
 					<div className="bg-gray-50 rounded-lg p-4">
@@ -169,22 +161,27 @@ export default async function DemandForecastingPage() {
 							<li>• Arrivals 1 hour ago</li>
 							<li>• Total trips (departures + arrivals) 1 hour ago</li>
 						</ul>
+						<p className="text-xs text-gray-600 mt-2 italic">Recent demand momentum and weekly patterns</p>
 					</div>
 
 					<div className="bg-gray-50 rounded-lg p-4">
-						<h4 className="font-semibold text-gray-900 mb-2 text-sm">Aggregated Features (5)</h4>
+						<h4 className="font-semibold text-gray-900 mb-2 text-sm">Aggregated Features (8)</h4>
 						<ul className="space-y-1 text-sm text-gray-700">
 							<li>• Rolling averages: 24-hour, 7-day windows</li>
 							<li>• System-wide departures (all 7 stations) 1h ago</li>
+							<li>• System-wide total trips 1h ago</li>
 							<li>• Historical average by station-hour-daytype</li>
+							<li>• Interaction features (e.g., hour × is_weekend)</li>
+							<li>• Station encoding</li>
 						</ul>
+						<p className="text-xs text-gray-600 mt-2 italic">Network-wide trends and baseline patterns</p>
 					</div>
 				</div>
 
 				<div className="bg-blue-50 rounded-lg p-6">
-					<h3 className="font-semibold text-gray-900 mb-2">Cyclical Encoding Explained</h3>
+					<h3 className="font-semibold text-gray-900 mb-2">Key Design Choice: Cyclical Encoding</h3>
 					<p className="text-gray-700">
-						Time is circular: hour 23 and hour 0 are only 1 hour apart, but numerically they're 23 units apart. Cyclical encoding using sine/cosine transforms preserves this circular relationship, allowing the model to correctly learn that late night (23:00) and early morning (00:00) have similar demand patterns.
+						For temporal features like hour, day of week, and month, we use cyclical encoding (sine/cosine transformations) instead of raw numeric values. This preserves the circular nature of time: hour 23 (11pm) and hour 0 (midnight) are numerically 23 units apart, but in reality they're only 1 hour apart. This allows the model to correctly learn that late-night and early-morning hours have similar demand patterns, despite being distant in numeric value.
 					</p>
 				</div>
 			</div>
