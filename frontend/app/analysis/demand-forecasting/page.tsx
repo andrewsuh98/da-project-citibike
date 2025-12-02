@@ -19,7 +19,6 @@ async function loadModelSummary(): Promise<any> {
 export default async function DemandForecastingPage() {
 	// Load all data
 	const [
-		pipelineDiagramData,
 		dataSplitData,
 		featureBreakdownData,
 		modelComparisonData,
@@ -28,7 +27,6 @@ export default async function DemandForecastingPage() {
 		timeSeriesPredictionData,
 		modelSummary
 	] = await Promise.all([
-		loadChartData('pipeline_diagram.json'),
 		loadChartData('data_split.json'),
 		loadChartData('feature_breakdown.json'),
 		loadChartData('model_comparison.json'),
@@ -65,11 +63,13 @@ export default async function DemandForecastingPage() {
 					Our demand forecasting system follows a standard machine learning pipeline, from raw trip data to actionable hourly predictions.
 				</p>
 
-				<PlotlyChart
-					data={pipelineDiagramData.data}
-					layout={pipelineDiagramData.layout}
-					className="w-full"
-				/>
+				<div className="flex justify-center mb-6">
+					<img
+						src="/data/forecasting/pipeline_diagram.svg"
+						alt="ML Pipeline Diagram"
+						className="w-full max-w-md"
+					/>
+				</div>
 
 				<div className="mt-6 bg-blue-50 rounded-lg p-6">
 					<h3 className="font-semibold text-gray-900 mb-2">Pipeline Overview</h3>

@@ -465,78 +465,80 @@ with open(output_dir / 'model_summary.json', 'w') as f:
 
 print("✓ Saved model_summary.json")
 
-# 5. ML Pipeline Diagram
+# 5. ML Pipeline Diagram (SVG)
 print("Generating ML pipeline diagram...")
-fig_pipeline = go.Figure()
 
 # Pipeline stages with stats
 stages = [
-	{"name": "Raw Data", "y": 6, "stats": "529,908 trips", "color": "#6b7280"},
-	{"name": "Data Preparation", "y": 5, "stats": "91,028 station-hours", "color": "#0070f3"},
-	{"name": "Feature Engineering", "y": 4, "stats": "27 features", "color": "#10b981"},
-	{"name": "Model Training", "y": 3, "stats": "4 models compared", "color": "#8b5cf6"},
-	{"name": "Evaluation", "y": 2, "stats": "R² = 0.722", "color": "#f59e0b"},
-	{"name": "Predictions", "y": 1, "stats": "Hourly forecasts", "color": "#ef4444"}
+	{"name": "Raw Data", "stats": "529,908 trips", "color": "#6b7280"},
+	{"name": "Data Preparation", "stats": "91,028 station-hours", "color": "#0070f3"},
+	{"name": "Feature Engineering", "stats": "27 features", "color": "#10b981"},
+	{"name": "Model Training", "stats": "4 models compared", "color": "#8b5cf6"},
+	{"name": "Evaluation", "stats": "R² = 0.722", "color": "#f59e0b"},
+	{"name": "Predictions", "stats": "Hourly forecasts", "color": "#ef4444"}
 ]
 
-# Add boxes for each stage
-for stage in stages:
-	fig_pipeline.add_shape(
-		type="rect",
-		x0=-0.4, x1=0.4, y0=stage["y"]-0.3, y1=stage["y"]+0.3,
-		line=dict(color=stage["color"], width=3),
-		fillcolor=stage["color"],
-		opacity=0.2
-	)
-	# Stage name
-	fig_pipeline.add_annotation(
-		x=0, y=stage["y"]+0.05,
-		text=f"<b>{stage['name']}</b>",
-		showarrow=False,
-		font=dict(size=14, color="black"),
-		bgcolor="white"
-	)
-	# Stage stats
-	fig_pipeline.add_annotation(
-		x=0, y=stage["y"]-0.15,
-		text=stage['stats'],
-		showarrow=False,
-		font=dict(size=11, color=stage["color"])
-	)
+# SVG parameters
+box_width = 300
+box_height = 80
+box_spacing = 60
+arrow_length = 40
+start_y = 50
+total_height = len(stages) * (box_height + box_spacing) + start_y
 
-# Add arrows between stages
-for i in range(len(stages)-1):
-	fig_pipeline.add_annotation(
-		x=0, y=stages[i]["y"]-0.35,
-		ax=0, ay=stages[i]["y"]-0.35,
-		xref="x", yref="y",
-		axref="x", ayref="y",
-		showarrow=True,
-		arrowhead=2,
-		arrowsize=1.5,
-		arrowwidth=2,
-		arrowcolor="#374151"
-	)
-	fig_pipeline.add_annotation(
-		x=0, y=stages[i+1]["y"]+0.35,
-		showarrow=False,
-		text=""
-	)
+svg_content = f'''<svg width="400" height="{total_height}" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+			<feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+			<feOffset dx="0" dy="2" result="offsetblur"/>
+			<feComponentTransfer>
+				<feFuncA type="linear" slope="0.3"/>
+			</feComponentTransfer>
+			<feMerge>
+				<feMergeNode/>
+				<feMergeNode in="SourceGraphic"/>
+			</feMerge>
+		</filter>
+	</defs>
+'''
 
-fig_pipeline.update_layout(
-	title='Machine Learning Pipeline',
-	xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1, 1]),
-	yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[0.5, 6.5]),
-	height=600,
-	template='plotly_white',
-	showlegend=False,
-	margin=dict(l=50, r=50, t=80, b=50)
-)
+# Draw boxes and arrows
+for i, stage in enumerate(stages):
+	y = start_y + i * (box_height + box_spacing)
+	x = 50
 
-with open(output_dir / 'pipeline_diagram.json', 'w') as f:
-	json.dump(fig_pipeline.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+	# Box
+	svg_content += f'''
+	<rect x="{x}" y="{y}" width="{box_width}" height="{box_height}"
+		rx="8" fill="{stage['color']}" opacity="0.15"
+		stroke="{stage['color']}" stroke-width="2" filter="url(#shadow)"/>
+	<text x="{x + box_width/2}" y="{y + 30}"
+		font-family="Arial, sans-serif" font-size="18" font-weight="bold"
+		fill="#1f2937" text-anchor="middle">{stage['name']}</text>
+	<text x="{x + box_width/2}" y="{y + 55}"
+		font-family="Arial, sans-serif" font-size="14"
+		fill="{stage['color']}" text-anchor="middle">{stage['stats']}</text>
+'''
 
-print("✓ Saved pipeline_diagram.json")
+	# Arrow to next stage
+	if i < len(stages) - 1:
+		arrow_start_y = y + box_height
+		arrow_end_y = arrow_start_y + box_spacing
+		arrow_x = x + box_width / 2
+
+		svg_content += f'''
+	<line x1="{arrow_x}" y1="{arrow_start_y}" x2="{arrow_x}" y2="{arrow_end_y}"
+		stroke="#4b5563" stroke-width="3"/>
+	<polygon points="{arrow_x},{arrow_end_y} {arrow_x-6},{arrow_end_y-10} {arrow_x+6},{arrow_end_y-10}"
+		fill="#4b5563"/>
+'''
+
+svg_content += '</svg>'
+
+with open(output_dir / 'pipeline_diagram.svg', 'w') as f:
+	f.write(svg_content)
+
+print("✓ Saved pipeline_diagram.svg")
 
 # 6. Data Split Timeline
 print("Generating data split timeline...")
