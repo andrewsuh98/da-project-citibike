@@ -64,7 +64,7 @@ export default function AboutPage() {
 					{/* Zhesan Liu */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
 						<img
-							src="https://media.licdn.com/dms/image/v2/D5635AQF9w03QaA-8oA/profile-framedphoto-shrink_800_800/B56Zc1V4zCHoAg-/0/1748946619900?e=1764612000&v=beta&t=fZPaLLnwFtnpQglDojNf7bFXUdVLos5tY0r3bBcjo7k"
+							src="https://media.licdn.com/dms/image/v2/D5635AQF9w03QaA-8oA/profile-framedphoto-shrink_800_800/B56Zc1V4zCHoAg-/0/1748946619900?e=1765310400&v=beta&t=lMs580u8U1irLPqkn-ZKb-JbP5GsxI7uZ5tiq3O34Xc"
 							alt="Zhesan Liu"
 							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
 						/>
@@ -79,7 +79,7 @@ export default function AboutPage() {
 					{/* Zicheng Ni */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
 						<img
-							src="https://media.licdn.com/dms/image/v2/D4E35AQFOca-0JpnrbA/profile-framedphoto-shrink_800_800/B4EZouWcaoKkAg-/0/1761714227111?e=1764612000&v=beta&t=M4s1dhx4U11IHsHu5GsI92kGWSU8DGeacoG1p-FdzYw"
+							src="https://media.licdn.com/dms/image/v2/D4E35AQFOca-0JpnrbA/profile-framedphoto-shrink_800_800/B4EZouWcaoKkAg-/0/1761714227111?e=1765310400&v=beta&t=c7b2nQEU7whZHDnsMbqHL_5corOqg2eZYzgOc5b-Iq8"
 							alt="Zicheng Ni"
 							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
 						/>
