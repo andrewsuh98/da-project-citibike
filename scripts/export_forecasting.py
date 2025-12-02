@@ -465,8 +465,216 @@ with open(output_dir / 'model_summary.json', 'w') as f:
 
 print("✓ Saved model_summary.json")
 
-print(f"\n✅ Export complete! Generated 4 files in {output_dir}")
+# 5. ML Pipeline Diagram
+print("Generating ML pipeline diagram...")
+fig_pipeline = go.Figure()
+
+# Pipeline stages with stats
+stages = [
+	{"name": "Raw Data", "y": 6, "stats": "529,908 trips", "color": "#6b7280"},
+	{"name": "Data Preparation", "y": 5, "stats": "91,028 station-hours", "color": "#0070f3"},
+	{"name": "Feature Engineering", "y": 4, "stats": "27 features", "color": "#10b981"},
+	{"name": "Model Training", "y": 3, "stats": "4 models compared", "color": "#8b5cf6"},
+	{"name": "Evaluation", "y": 2, "stats": "R² = 0.722", "color": "#f59e0b"},
+	{"name": "Predictions", "y": 1, "stats": "Hourly forecasts", "color": "#ef4444"}
+]
+
+# Add boxes for each stage
+for stage in stages:
+	fig_pipeline.add_shape(
+		type="rect",
+		x0=-0.4, x1=0.4, y0=stage["y"]-0.3, y1=stage["y"]+0.3,
+		line=dict(color=stage["color"], width=3),
+		fillcolor=stage["color"],
+		opacity=0.2
+	)
+	# Stage name
+	fig_pipeline.add_annotation(
+		x=0, y=stage["y"]+0.05,
+		text=f"<b>{stage['name']}</b>",
+		showarrow=False,
+		font=dict(size=14, color="black"),
+		bgcolor="white"
+	)
+	# Stage stats
+	fig_pipeline.add_annotation(
+		x=0, y=stage["y"]-0.15,
+		text=stage['stats'],
+		showarrow=False,
+		font=dict(size=11, color=stage["color"])
+	)
+
+# Add arrows between stages
+for i in range(len(stages)-1):
+	fig_pipeline.add_annotation(
+		x=0, y=stages[i]["y"]-0.35,
+		ax=0, ay=stages[i]["y"]-0.35,
+		xref="x", yref="y",
+		axref="x", ayref="y",
+		showarrow=True,
+		arrowhead=2,
+		arrowsize=1.5,
+		arrowwidth=2,
+		arrowcolor="#374151"
+	)
+	fig_pipeline.add_annotation(
+		x=0, y=stages[i+1]["y"]+0.35,
+		showarrow=False,
+		text=""
+	)
+
+fig_pipeline.update_layout(
+	title='Machine Learning Pipeline',
+	xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1, 1]),
+	yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[0.5, 6.5]),
+	height=600,
+	template='plotly_white',
+	showlegend=False,
+	margin=dict(l=50, r=50, t=80, b=50)
+)
+
+with open(output_dir / 'pipeline_diagram.json', 'w') as f:
+	json.dump(fig_pipeline.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print("✓ Saved pipeline_diagram.json")
+
+# 6. Data Split Timeline
+print("Generating data split timeline...")
+fig_split = go.Figure()
+
+fig_split.add_trace(go.Bar(
+	name='Training',
+	y=['Dataset'],
+	x=[len(train_data)],
+	orientation='h',
+	marker=dict(color='#0070f3'),
+	text=[f'Train: {len(train_data):,} hours'],
+	textposition='inside',
+	insidetextanchor='middle',
+	hovertemplate='Training<br>%{x:,} hours<extra></extra>'
+))
+
+fig_split.add_trace(go.Bar(
+	name='Validation',
+	y=['Dataset'],
+	x=[len(val_data)],
+	orientation='h',
+	marker=dict(color='#10b981'),
+	text=[f'Val: {len(val_data):,} hours'],
+	textposition='inside',
+	insidetextanchor='middle',
+	hovertemplate='Validation<br>%{x:,} hours<extra></extra>'
+))
+
+fig_split.add_trace(go.Bar(
+	name='Test',
+	y=['Dataset'],
+	x=[len(test_data)],
+	orientation='h',
+	marker=dict(color='#f59e0b'),
+	text=[f'Test: {len(test_data):,} hours'],
+	textposition='inside',
+	insidetextanchor='middle',
+	hovertemplate='Test<br>%{x:,} hours<extra></extra>'
+))
+
+fig_split.update_layout(
+	title='Train/Validation/Test Split',
+	barmode='stack',
+	height=200,
+	template='plotly_white',
+	xaxis_title='Number of Hours',
+	yaxis=dict(showticklabels=False),
+	showlegend=True,
+	legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1)
+)
+
+with open(output_dir / 'data_split.json', 'w') as f:
+	json.dump(fig_split.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print("✓ Saved data_split.json")
+
+# 7. Feature Breakdown
+print("Generating feature breakdown...")
+feature_categories = {
+	'Temporal': 8,
+	'Academic Calendar': 6,
+	'Lag Features': 5,
+	'Rolling Averages': 2,
+	'System-wide': 2,
+	'Historical': 1,
+	'Interaction': 2,
+	'Station Encoding': 1
+}
+
+fig_features = px.pie(
+	values=list(feature_categories.values()),
+	names=list(feature_categories.keys()),
+	title='Feature Distribution by Category (27 total)',
+	color_discrete_sequence=['#0070f3', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899', '#6b7280']
+)
+
+fig_features.update_traces(textposition='inside', textinfo='label+value')
+fig_features.update_layout(height=500, template='plotly_white')
+
+with open(output_dir / 'feature_breakdown.json', 'w') as f:
+	json.dump(fig_features.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print("✓ Saved feature_breakdown.json")
+
+# 8. Error Distribution
+print("Generating error distribution...")
+residuals = y_test.values - y_pred_xgb
+
+fig_errors = px.histogram(
+	x=residuals,
+	nbins=50,
+	title='Prediction Error Distribution',
+	labels={'x': 'Error (Actual - Predicted Departures)', 'count': 'Frequency'},
+	color_discrete_sequence=['#0070f3']
+)
+
+# Add vertical line at 0
+fig_errors.add_vline(
+	x=0,
+	line_dash='dash',
+	line_color='red',
+	annotation_text='Perfect Predictions',
+	annotation_position='top'
+)
+
+# Add annotations for MAE and RMSE
+fig_errors.add_annotation(
+	x=0.7,
+	y=0.95,
+	xref='paper',
+	yref='paper',
+	text=f'<b>MAE:</b> {mae_xgb:.3f}<br><b>RMSE:</b> {rmse_xgb:.3f}',
+	showarrow=False,
+	bgcolor='white',
+	bordercolor='#0070f3',
+	borderwidth=2,
+	borderpad=10,
+	font=dict(size=12)
+)
+
+fig_errors.update_layout(
+	height=400,
+	template='plotly_white',
+	showlegend=False
+)
+
+with open(output_dir / 'error_distribution.json', 'w') as f:
+	json.dump(fig_errors.to_dict(), f, cls=plotly.utils.PlotlyJSONEncoder)
+
+print("✓ Saved error_distribution.json")
+
+print(f"\n✅ Export complete! Generated 8 files in {output_dir}")
 print(f"   - model_comparison.json")
 print(f"   - feature_importance.json")
 print(f"   - time_series_prediction.json")
 print(f"   - model_summary.json")
+print(f"   - pipeline_diagram.json")
+print(f"   - data_split.json")
+print(f"   - feature_breakdown.json")
+print(f"   - error_distribution.json")

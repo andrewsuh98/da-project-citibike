@@ -1,5 +1,5 @@
 import PlotlyChart from '@/components/PlotlyChart';
-import { PlotlyData, SummaryStats } from '@/lib/types';
+import { PlotlyData } from '@/lib/types';
 import { promises as fs } from 'fs';
 import path from 'path';
 import Link from 'next/link';
@@ -19,12 +19,20 @@ async function loadModelSummary(): Promise<any> {
 export default async function DemandForecastingPage() {
 	// Load all data
 	const [
+		pipelineDiagramData,
+		dataSplitData,
+		featureBreakdownData,
 		modelComparisonData,
+		errorDistributionData,
 		featureImportanceData,
 		timeSeriesPredictionData,
 		modelSummary
 	] = await Promise.all([
+		loadChartData('pipeline_diagram.json'),
+		loadChartData('data_split.json'),
+		loadChartData('feature_breakdown.json'),
 		loadChartData('model_comparison.json'),
+		loadChartData('error_distribution.json'),
 		loadChartData('feature_importance.json'),
 		loadChartData('time_series_prediction.json'),
 		loadModelSummary()
@@ -32,101 +40,183 @@ export default async function DemandForecastingPage() {
 
 	return (
 		<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-			{/* Page Header */}
+			{/* Section 1: Page Header */}
 			<div className="mb-12">
 				<h1 className="text-4xl font-bold text-gray-900 mb-4">
 					Demand Forecasting Model
 				</h1>
-				<p className="text-lg text-gray-600">
-					Predicting hourly bike demand at Columbia stations using machine learning to optimize station rebalancing and capacity planning.
+				<p className="text-lg text-gray-600 mb-6">
+					Using machine learning to predict hourly bike demand at Columbia stations for optimized rebalancing and capacity planning.
 				</p>
-			</div>
 
-			{/* Research Question */}
-			<div className="bg-blue-50 border-l-4 border-primary rounded-r-lg p-6 mb-12">
-				<h2 className="text-lg font-semibold text-gray-900 mb-2">Research Question</h2>
-				<p className="text-gray-700">
-					Can we accurately predict hourly bike demand at Columbia stations to optimize rebalancing operations and improve user experience?
-				</p>
-			</div>
-
-			{/* Model Overview */}
-			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
-				<h2 className="text-2xl font-bold text-gray-900 mb-6">Model Overview</h2>
-
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-					<div className="bg-gray-50 rounded-lg p-6">
-						<h3 className="text-sm font-medium text-gray-500 mb-3">Best Model</h3>
-						<p className="text-3xl font-bold text-gray-900 mb-2">XGBoost</p>
-						<p className="text-sm text-gray-600 mb-3">Gradient boosting ensemble</p>
-						<div className="space-y-2 text-sm">
-							<div className="flex justify-between">
-								<span className="text-gray-600">MAE:</span>
-								<span className="font-semibold text-gray-900">{modelSummary.mae} departures</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-gray-600">R²:</span>
-								<span className="font-semibold text-gray-900">{modelSummary.r2}</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-gray-600">RMSE:</span>
-								<span className="font-semibold text-gray-900">{modelSummary.rmse}</span>
-							</div>
-						</div>
-					</div>
-
-					<div className="bg-gray-50 rounded-lg p-6">
-						<h3 className="text-sm font-medium text-gray-500 mb-3">Dataset</h3>
-						<p className="text-3xl font-bold text-gray-900 mb-2">
-							{(modelSummary.total_trips / 1000).toFixed(0)}K
-						</p>
-						<p className="text-sm text-gray-600 mb-3">Total trips analyzed</p>
-						<div className="space-y-2 text-sm">
-							<div className="flex justify-between">
-								<span className="text-gray-600">Stations:</span>
-								<span className="font-semibold text-gray-900">{modelSummary.stations}</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-gray-600">Date range:</span>
-								<span className="font-semibold text-gray-900">2024-2025</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-gray-600">Features:</span>
-								<span className="font-semibold text-gray-900">{modelSummary.features_used}</span>
-							</div>
-						</div>
-					</div>
-
-					<div className="bg-gray-50 rounded-lg p-6">
-						<h3 className="text-sm font-medium text-gray-500 mb-3">Test Performance</h3>
-						<p className="text-3xl font-bold text-gray-900 mb-2">
-							{(modelSummary.test_samples / 1000).toFixed(1)}K
-						</p>
-						<p className="text-sm text-gray-600 mb-3">Test set hours</p>
-						<div className="space-y-2 text-sm">
-							<div className="flex justify-between">
-								<span className="text-gray-600">Avg demand:</span>
-								<span className="font-semibold text-gray-900">{modelSummary.test_mean_departures} trips/hr</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-gray-600">Period:</span>
-								<span className="font-semibold text-gray-900">Oct 2025</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-gray-600">Stations:</span>
-								<span className="font-semibold text-gray-900">{modelSummary.stations}</span>
-							</div>
-						</div>
-					</div>
+				{/* Research Question */}
+				<div className="bg-blue-50 border-l-4 border-primary rounded-r-lg p-6">
+					<h2 className="text-lg font-semibold text-gray-900 mb-2">Research Question</h2>
+					<p className="text-gray-700">
+						Can we accurately predict hourly bike demand at Columbia stations to optimize rebalancing operations and improve user experience?
+					</p>
 				</div>
 			</div>
 
-			{/* Model Comparison */}
+			{/* Section 2: ML Pipeline Overview */}
 			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
-				<h2 className="text-2xl font-bold text-gray-900 mb-4">Model Performance Comparison</h2>
+				<h2 className="text-2xl font-bold text-gray-900 mb-4">Machine Learning Pipeline</h2>
 				<p className="text-gray-600 mb-6">
-					We compared four different modeling approaches: a simple baseline (historical average), linear regression, random forest, and gradient boosting (XGBoost). XGBoost achieves the best performance.
+					Our demand forecasting system follows a standard machine learning pipeline, from raw trip data to actionable hourly predictions.
 				</p>
+
+				<PlotlyChart
+					data={pipelineDiagramData.data}
+					layout={pipelineDiagramData.layout}
+					className="w-full"
+				/>
+
+				<div className="mt-6 bg-blue-50 rounded-lg p-6">
+					<h3 className="font-semibold text-gray-900 mb-2">Pipeline Overview</h3>
+					<p className="text-gray-700">
+						The pipeline transforms 529,908 raw trip records into hourly demand forecasts through systematic data preparation, feature engineering, model training, and evaluation stages. Each stage builds upon the previous one to create increasingly refined predictions.
+					</p>
+				</div>
+			</div>
+
+			{/* Section 3: Data Preparation */}
+			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
+				<h2 className="text-2xl font-bold text-gray-900 mb-4">1. Data Preparation</h2>
+				<p className="text-gray-600 mb-6">
+					The first step transforms raw trip-level data into hourly station-level records suitable for time series forecasting.
+				</p>
+
+				<div className="bg-gray-50 rounded-lg p-6 mb-6">
+					<h3 className="text-lg font-semibold text-gray-900 mb-3">Data Processing Steps</h3>
+					<div className="space-y-3 text-sm text-gray-700">
+						<div className="flex items-start">
+							<span className="text-primary font-bold mr-3">•</span>
+							<span><strong>Raw Data:</strong> 529,908 individual trips from January 2024 to October 2025 across 7 Columbia area stations</span>
+						</div>
+						<div className="flex items-start">
+							<span className="text-primary font-bold mr-3">•</span>
+							<span><strong>Temporal Aggregation:</strong> Group trips by station and hour, count departures and arrivals per station-hour combination</span>
+						</div>
+						<div className="flex items-start">
+							<span className="text-primary font-bold mr-3">•</span>
+							<span><strong>Time Series Completion:</strong> Fill missing hours with zero trips to create continuous 91,028 station-hour records</span>
+						</div>
+						<div className="flex items-start">
+							<span className="text-primary font-bold mr-3">•</span>
+							<span><strong>Temporal Filtering:</strong> Focus on May 2024 - October 2025 period with sufficient data coverage</span>
+						</div>
+					</div>
+				</div>
+
+				<div className="mb-6">
+					<h3 className="text-lg font-semibold text-gray-900 mb-3">Train/Validation/Test Split</h3>
+					<p className="text-sm text-gray-600 mb-4">
+						Time-based split ensures no data leakage: the model never sees future data during training.
+					</p>
+					<PlotlyChart
+						data={dataSplitData.data}
+						layout={dataSplitData.layout}
+						className="w-full"
+					/>
+				</div>
+
+				<div className="bg-blue-50 rounded-lg p-6">
+					<h3 className="font-semibold text-gray-900 mb-2">Why Time-Based Splitting?</h3>
+					<p className="text-gray-700">
+						Unlike random splitting, time-based splitting mimics real-world deployment: the model trains on historical data and predicts future demand. This prevents data leakage and provides realistic performance estimates. The test set (October 2025) represents genuine future predictions.
+					</p>
+				</div>
+			</div>
+
+			{/* Section 4: Feature Engineering */}
+			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
+				<h2 className="text-2xl font-bold text-gray-900 mb-4">2. Feature Engineering</h2>
+				<p className="text-gray-600 mb-6">
+					Transform raw hourly counts into 27 predictive features that capture temporal patterns, academic calendar effects, and historical trends.
+				</p>
+
+				<div className="mb-6">
+					<PlotlyChart
+						data={featureBreakdownData.data}
+						layout={featureBreakdownData.layout}
+						className="w-full"
+					/>
+				</div>
+
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+					<div className="bg-gray-50 rounded-lg p-4">
+						<h4 className="font-semibold text-gray-900 mb-2 text-sm">Temporal Features (8)</h4>
+						<ul className="space-y-1 text-sm text-gray-700">
+							<li>• Cyclical encoding: hour, day of week, month (sine/cosine)</li>
+							<li>• Rush hour indicator (7-9am, 4-6pm weekdays)</li>
+							<li>• Weekend flag</li>
+						</ul>
+					</div>
+
+					<div className="bg-gray-50 rounded-lg p-4">
+						<h4 className="font-semibold text-gray-900 mb-2 text-sm">Academic Calendar (6)</h4>
+						<ul className="space-y-1 text-sm text-gray-700">
+							<li>• Semester period, holidays, finals weeks</li>
+							<li>• Study days, spring/winter breaks</li>
+							<li>• Days since semester start</li>
+						</ul>
+					</div>
+
+					<div className="bg-gray-50 rounded-lg p-4">
+						<h4 className="font-semibold text-gray-900 mb-2 text-sm">Lag Features (5)</h4>
+						<ul className="space-y-1 text-sm text-gray-700">
+							<li>• Departures 1 hour, 24 hours, 1 week ago</li>
+							<li>• Arrivals 1 hour ago</li>
+							<li>• Total trips (departures + arrivals) 1 hour ago</li>
+						</ul>
+					</div>
+
+					<div className="bg-gray-50 rounded-lg p-4">
+						<h4 className="font-semibold text-gray-900 mb-2 text-sm">Aggregated Features (5)</h4>
+						<ul className="space-y-1 text-sm text-gray-700">
+							<li>• Rolling averages: 24-hour, 7-day windows</li>
+							<li>• System-wide departures (all 7 stations) 1h ago</li>
+							<li>• Historical average by station-hour-daytype</li>
+						</ul>
+					</div>
+				</div>
+
+				<div className="bg-blue-50 rounded-lg p-6">
+					<h3 className="font-semibold text-gray-900 mb-2">Cyclical Encoding Explained</h3>
+					<p className="text-gray-700">
+						Time is circular: hour 23 and hour 0 are only 1 hour apart, but numerically they're 23 units apart. Cyclical encoding using sine/cosine transforms preserves this circular relationship, allowing the model to correctly learn that late night (23:00) and early morning (00:00) have similar demand patterns.
+					</p>
+				</div>
+			</div>
+
+			{/* Section 5: Model Training */}
+			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
+				<h2 className="text-2xl font-bold text-gray-900 mb-4">3. Model Training</h2>
+				<p className="text-gray-600 mb-6">
+					We compared four modeling approaches to identify the best predictor of hourly bike demand.
+				</p>
+
+				<div className="bg-gray-50 rounded-lg p-6 mb-6">
+					<h3 className="text-lg font-semibold text-gray-900 mb-3">Models Compared</h3>
+					<div className="space-y-3 text-sm text-gray-700">
+						<div className="flex items-start">
+							<span className="text-primary font-bold mr-3">1.</span>
+							<span><strong>Baseline (Historical Average):</strong> Simple heuristic using average departures for each station-hour-daytype combination</span>
+						</div>
+						<div className="flex items-start">
+							<span className="text-primary font-bold mr-3">2.</span>
+							<span><strong>Linear Regression:</strong> Ridge regression with all 27 features, assumes linear relationships</span>
+						</div>
+						<div className="flex items-start">
+							<span className="text-primary font-bold mr-3">3.</span>
+							<span><strong>Random Forest:</strong> Ensemble of 200 decision trees (max_depth=20, min_samples_split=5)</span>
+						</div>
+						<div className="flex items-start">
+							<span className="text-primary font-bold mr-3">4.</span>
+							<span><strong>XGBoost:</strong> Gradient boosting with 500 trees, learning_rate=0.05, max_depth=7, early stopping on validation set</span>
+						</div>
+					</div>
+				</div>
 
 				<PlotlyChart
 					data={modelComparisonData.data}
@@ -137,16 +227,66 @@ export default async function DemandForecastingPage() {
 				<div className="mt-6 bg-blue-50 rounded-lg p-6">
 					<h3 className="font-semibold text-gray-900 mb-2">Key Insight</h3>
 					<p className="text-gray-700">
-						<strong>XGBoost outperforms the baseline by 50% in MAE</strong>, reducing average prediction error from 3.26 to 1.63 departures per hour. The model explains 72.2% of variance in departures (R² = 0.722), compared to -25.9% for the baseline, indicating the learned patterns significantly outperform historical averages alone.
+						<strong>XGBoost achieves the best performance</strong> with MAE = 1.63 departures/hour and R² = 0.722. This represents a 50% improvement over the baseline (MAE = 3.26), demonstrating that machine learning patterns significantly outperform simple historical averages. The negative R² for the baseline (-0.259) indicates that historical averages perform worse than simply predicting the mean for all samples.
 					</p>
 				</div>
 			</div>
 
-			{/* Feature Importance */}
+			{/* Section 6: Model Evaluation */}
 			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
-				<h2 className="text-2xl font-bold text-gray-900 mb-4">Key Predictive Features</h2>
+				<h2 className="text-2xl font-bold text-gray-900 mb-4">4. Model Evaluation</h2>
 				<p className="text-gray-600 mb-6">
-					The XGBoost model relies on a diverse set of features to make accurate predictions. The chart below shows the 15 most important features, ranked by their contribution to the model's predictions.
+					Rigorous evaluation on held-out October 2025 test data ensures the model generalizes to unseen future periods.
+				</p>
+
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+					<div className="bg-gray-50 rounded-lg p-6">
+						<h3 className="text-sm font-medium text-gray-500 mb-3">MAE</h3>
+						<p className="text-3xl font-bold text-gray-900 mb-2">{modelSummary.mae}</p>
+						<p className="text-sm text-gray-600">Mean Absolute Error (departures)</p>
+						<p className="text-xs text-gray-500 mt-2">Average prediction error magnitude</p>
+					</div>
+
+					<div className="bg-gray-50 rounded-lg p-6">
+						<h3 className="text-sm font-medium text-gray-500 mb-3">RMSE</h3>
+						<p className="text-3xl font-bold text-gray-900 mb-2">{modelSummary.rmse}</p>
+						<p className="text-sm text-gray-600">Root Mean Squared Error (departures)</p>
+						<p className="text-xs text-gray-500 mt-2">Penalizes large errors more heavily</p>
+					</div>
+
+					<div className="bg-gray-50 rounded-lg p-6">
+						<h3 className="text-sm font-medium text-gray-500 mb-3">R² Score</h3>
+						<p className="text-3xl font-bold text-gray-900 mb-2">{modelSummary.r2}</p>
+						<p className="text-sm text-gray-600">Variance Explained (0-1 scale)</p>
+						<p className="text-xs text-gray-500 mt-2">Proportion of variance captured by model</p>
+					</div>
+				</div>
+
+				<div className="mb-6">
+					<h3 className="text-lg font-semibold text-gray-900 mb-3">Prediction Error Distribution</h3>
+					<p className="text-sm text-gray-600 mb-4">
+						The distribution of prediction errors (actual - predicted) shows model bias and accuracy. Ideally, errors center near zero with minimal spread.
+					</p>
+					<PlotlyChart
+						data={errorDistributionData.data}
+						layout={errorDistributionData.layout}
+						className="w-full"
+					/>
+				</div>
+
+				<div className="bg-blue-50 rounded-lg p-6">
+					<h3 className="font-semibold text-gray-900 mb-2">Evaluation Results</h3>
+					<p className="text-gray-700">
+						The error distribution is roughly centered near zero, indicating unbiased predictions. The MAE of 1.63 departures means the model's average error is less than 2 bikes per hour—highly accurate for operational planning. The R² of 0.722 means the model explains 72% of demand variance, significantly better than the baseline's negative R².
+					</p>
+				</div>
+			</div>
+
+			{/* Section 7: Feature Importance */}
+			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
+				<h2 className="text-2xl font-bold text-gray-900 mb-4">5. Feature Importance Analysis</h2>
+				<p className="text-gray-600 mb-6">
+					Understanding which features drive predictions reveals the key factors influencing bike demand.
 				</p>
 
 				<PlotlyChart
@@ -160,25 +300,25 @@ export default async function DemandForecastingPage() {
 					<ul className="space-y-2 text-gray-700">
 						<li className="flex items-start">
 							<span className="text-primary font-bold mr-3">1.</span>
-							<span><strong>System departures lag (1h):</strong> Total departures across all Columbia stations 1 hour ago. Most important because recent system-wide activity is the strongest predictor of future demand.</span>
+							<span><strong>System departures lag (1h):</strong> Total departures across all Columbia stations 1 hour ago. Recent system-wide activity is the strongest predictor—when the entire network is busy, individual stations will be too.</span>
 						</li>
 						<li className="flex items-start">
 							<span className="text-primary font-bold mr-3">2.</span>
-							<span><strong>System total trips lag (1h):</strong> Total system activity (arrivals + departures) from previous hour. Captures overall bike circulation patterns.</span>
+							<span><strong>System total trips lag (1h):</strong> Total system activity (arrivals + departures) from the previous hour. Captures overall bike circulation momentum.</span>
 						</li>
 						<li className="flex items-start">
 							<span className="text-primary font-bold mr-3">3.</span>
-							<span><strong>Historical average:</strong> Average departures for this station-hour-daytype combination. Captures recurring patterns across time.</span>
+							<span><strong>Historical average:</strong> Average departures for this station-hour-daytype combination. Recurring patterns across time provide a stable baseline.</span>
 						</li>
 					</ul>
 				</div>
 			</div>
 
-			{/* Time Series Prediction */}
+			{/* Section 8: Predictions */}
 			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
-				<h2 className="text-2xl font-bold text-gray-900 mb-4">Actual vs Predicted Departures</h2>
+				<h2 className="text-2xl font-bold text-gray-900 mb-4">6. Making Predictions</h2>
 				<p className="text-gray-600 mb-6">
-					This visualization shows the model's performance on a sample station during the October 2025 test period. The blue line represents actual observed departures (demand), while the red dashed line represents the model's predictions.
+					The trained model generates hourly demand forecasts by processing the 27 engineered features through the XGBoost ensemble.
 				</p>
 
 				<PlotlyChart
@@ -188,108 +328,29 @@ export default async function DemandForecastingPage() {
 				/>
 
 				<div className="mt-6 bg-blue-50 rounded-lg p-6">
-					<h3 className="font-semibold text-gray-900 mb-2">Model Performance</h3>
+					<h3 className="font-semibold text-gray-900 mb-2">Prediction Quality</h3>
 					<p className="text-gray-700">
-						The model successfully captures the temporal patterns in demand, including rush hour peaks and off-peak valleys. It tracks actual departures closely, though occasional spikes (likely due to external events) are underestimated. The model's ability to predict these patterns enables proactive rebalancing strategies.
+						The model successfully captures temporal demand patterns including rush hour peaks (morning and evening) and off-peak valleys. It tracks actual departures closely throughout October 2025 test period. Occasional spikes (likely due to special events or weather) are underestimated, but overall the predictions enable proactive rebalancing 1-24 hours in advance.
 					</p>
 				</div>
 			</div>
 
-			{/* How the Model Works */}
+			{/* Section 9: Key Findings */}
 			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
-				<h2 className="text-2xl font-bold text-gray-900 mb-6">How the Model Works</h2>
-
-				{/* Data Preparation */}
-				<div className="mb-8">
-					<h3 className="text-lg font-semibold text-gray-900 mb-3">Data Preparation</h3>
-					<div className="bg-gray-50 rounded-lg p-6 space-y-2 text-sm text-gray-700">
-						<p><strong>Raw data:</strong> 529,908 trips from January 2024 to October 2025</p>
-						<p><strong>Aggregation:</strong> Grouped by station and hour to create hourly departure/arrival counts</p>
-						<p><strong>Time series:</strong> Created complete time series with 91,028 station-hour records (May 2024 - Oct 2025)</p>
-						<p><strong>Train/val/test split:</strong> {modelSummary.train_samples.toLocaleString()} training hours, {modelSummary.test_samples.toLocaleString()} test hours (time-based split to prevent data leakage)</p>
-					</div>
-				</div>
-
-				{/* Feature Engineering */}
-				<div className="mb-8">
-					<h3 className="text-lg font-semibold text-gray-900 mb-3">Feature Engineering ({modelSummary.features_used} Features)</h3>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-						<div className="bg-gray-50 rounded-lg p-4">
-							<h4 className="font-semibold text-gray-900 mb-2 text-sm">Temporal Features (8)</h4>
-							<ul className="space-y-1 text-sm text-gray-700">
-								<li>• Cyclical encoding: hour, day of week, month</li>
-								<li>• Rush hour indicator (7-9am, 4-6pm weekdays)</li>
-								<li>• Weekend flag</li>
-							</ul>
-						</div>
-
-						<div className="bg-gray-50 rounded-lg p-4">
-							<h4 className="font-semibold text-gray-900 mb-2 text-sm">Academic Calendar (6)</h4>
-							<ul className="space-y-1 text-sm text-gray-700">
-								<li>• Semester period, holidays, finals</li>
-								<li>• Study days, break periods</li>
-								<li>• Days since semester start</li>
-							</ul>
-						</div>
-
-						<div className="bg-gray-50 rounded-lg p-4">
-							<h4 className="font-semibold text-gray-900 mb-2 text-sm">Lag Features (5)</h4>
-							<ul className="space-y-1 text-sm text-gray-700">
-								<li>• Departures 1h, 24h, 168h ago</li>
-								<li>• Arrivals 1 hour ago</li>
-								<li>• Total trips 1 hour ago</li>
-							</ul>
-						</div>
-
-						<div className="bg-gray-50 rounded-lg p-4">
-							<h4 className="font-semibold text-gray-900 mb-2 text-sm">Aggregated Features (3)</h4>
-							<ul className="space-y-1 text-sm text-gray-700">
-								<li>• Rolling averages (24h, 7-day)</li>
-								<li>• System-wide departures lag</li>
-								<li>• Historical average by hour</li>
-							</ul>
-						</div>
-					</div>
-					<p className="text-xs text-gray-600 mt-4">
-						<strong>Key insight:</strong> Cyclical encoding (sine/cosine) captures that hour 23 and hour 0 are only 1 hour apart, not 23 hours.
-					</p>
-				</div>
-
-				{/* Model Training */}
-				<div>
-					<h3 className="text-lg font-semibold text-gray-900 mb-3">Model Training</h3>
-					<div className="bg-gray-50 rounded-lg p-6 space-y-3 text-sm text-gray-700">
-						<p><strong>Models compared:</strong> Baseline (historical average) → Linear Regression → Random Forest → XGBoost</p>
-						<p><strong>XGBoost configuration:</strong> 500 trees, learning rate 0.05, max depth 7, with early stopping on validation set to prevent overfitting</p>
-						<p><strong>Target variable:</strong> Hourly departures (demand) at each station</p>
-						<p><strong>Evaluation:</strong> MAE (mean absolute error in departures), RMSE, and R² (variance explained) on held-out October 2025 test set</p>
-					</div>
-				</div>
-			</div>
-
-			{/* Key Findings */}
-			<div className="bg-white rounded-lg shadow-lg p-8 mb-12">
-				<h2 className="text-2xl font-bold text-gray-900 mb-6">Key Findings Summary</h2>
+				<h2 className="text-2xl font-bold text-gray-900 mb-6">Key Findings & Applications</h2>
 
 				<div className="space-y-6">
 					<div>
-						<h3 className="text-lg font-semibold text-gray-900 mb-2">Model Accuracy</h3>
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Model Performance</h3>
 						<p className="text-gray-700">
-							XGBoost achieves <strong>R² = 0.722</strong> (explains 72% of variance) with <strong>MAE = 1.63 departures/hour</strong>. This represents a 50% improvement over the baseline historical average, demonstrating that learned patterns significantly outperform simple heuristics.
+							XGBoost achieves <strong>R² = 0.722</strong> (explains 72% of demand variance) with <strong>MAE = 1.63 departures/hour</strong>. This represents a 50% improvement over baseline historical averages, demonstrating that learned patterns from 27 engineered features significantly outperform simple heuristics.
 						</p>
 					</div>
 
 					<div>
-						<h3 className="text-lg font-semibold text-gray-900 mb-2">Most Important Signals</h3>
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Key Predictive Signals</h3>
 						<p className="text-gray-700">
-							Recent demand (system departures 1 hour ago) is the strongest predictor. The model also heavily relies on historical patterns and academic calendar information, indicating that demand follows both immediate momentum and longer-term seasonal/academic cycles.
-						</p>
-					</div>
-
-					<div>
-						<h3 className="text-lg font-semibold text-gray-900 mb-2">Why It Works</h3>
-						<p className="text-gray-700">
-							The model combines multiple signal types—recent activity, historical patterns, temporal cycles, and academic calendar events—to capture the complex dynamics of bike-share demand. No single factor dominates; instead, the ensemble approach leverages diverse information sources.
+							Recent system-wide activity (1 hour ago) is the strongest predictor. The model also relies heavily on historical patterns and academic calendar information, indicating demand follows both immediate momentum and longer-term seasonal/academic cycles. No single factor dominates—the ensemble leverages diverse information.
 						</p>
 					</div>
 
@@ -298,30 +359,37 @@ export default async function DemandForecastingPage() {
 						<ul className="space-y-2 text-gray-700">
 							<li className="flex items-start">
 								<span className="text-primary font-bold mr-3">•</span>
-								<span><strong>Rebalancing optimization:</strong> Predict when stations will run out of bikes or become full, enabling proactive rebalancing</span>
+								<span><strong>Proactive Rebalancing:</strong> Predict when stations will run out of bikes or become full 1-24 hours in advance, enabling efficient truck routing</span>
 							</li>
 							<li className="flex items-start">
 								<span className="text-primary font-bold mr-3">•</span>
-								<span><strong>Capacity planning:</strong> Identify underutilized periods and high-demand times to optimize dock/bike allocation</span>
+								<span><strong>Capacity Planning:</strong> Identify underutilized periods and high-demand times to optimize dock/bike allocation across the 7-station network</span>
 							</li>
 							<li className="flex items-start">
 								<span className="text-primary font-bold mr-3">•</span>
-								<span><strong>User experience:</strong> Alert users about expected bike availability at their preferred stations</span>
+								<span><strong>User Experience:</strong> Power mobile app alerts about expected bike availability at preferred stations, reducing user frustration</span>
 							</li>
 							<li className="flex items-start">
 								<span className="text-primary font-bold mr-3">•</span>
-								<span><strong>Infrastructure planning:</strong> Use demand forecasts to guide future station expansion or consolidation</span>
+								<span><strong>Infrastructure Planning:</strong> Use demand forecasts to guide decisions about future station expansion, relocation, or capacity increases</span>
 							</li>
 						</ul>
+					</div>
+
+					<div>
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Future Improvements</h3>
+						<p className="text-gray-700">
+							Potential enhancements include weather data integration (temperature, precipitation), event calendars (concerts, sports games), real-time API deployment for live predictions, per-station model tuning, and multi-step ahead forecasting (24-72 hours).
+						</p>
 					</div>
 				</div>
 			</div>
 
-			{/* Methodology Link */}
+			{/* Section 10: Methodology Link */}
 			<div className="bg-gray-50 rounded-lg p-6">
 				<h3 className="font-semibold text-gray-900 mb-2">Methodology & Technical Details</h3>
 				<p className="text-sm text-gray-600 mb-4">
-					For a comprehensive explanation of our data processing, feature engineering, and model selection methodology, please visit our methodology page.
+					For comprehensive documentation of data processing pipelines, feature engineering techniques, model hyperparameter tuning, and evaluation methodology, visit our methodology page.
 				</p>
 				<Link
 					href="/methodology"
