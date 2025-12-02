@@ -127,6 +127,28 @@ export default function MethodologyPage() {
 				</div>
 			</div>
 
+			{/* Demand Forecasting */}
+			<div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+				<h2 className="text-2xl font-bold text-gray-900 mb-4">Demand Forecasting</h2>
+				<div className="prose max-w-none text-gray-700">
+					<p className="mb-4">
+						We developed a machine learning model to predict hourly bike demand at Columbia area stations,
+						enabling proactive rebalancing strategies. Multiple regression models were evaluated to identify
+						the best performing approach.
+					</p>
+					<ul className="list-disc pl-6 mb-4">
+						<li><strong>Model Selection:</strong> Compared Linear Regression, Random Forest, Gradient Boosting, and XGBoost</li>
+						<li><strong>Best Model:</strong> XGBoost (Gradient Boosting) selected based on R² and MAE metrics</li>
+						<li><strong>Features:</strong> 27 engineered features including temporal patterns, lag variables, rolling averages, and academic calendar indicators</li>
+						<li><strong>Performance:</strong> R² = 0.722, MAE = 1.63 departures/hour</li>
+					</ul>
+					<p>
+						For detailed methodology including feature engineering, model comparison, and evaluation,
+						see the <a href="/analysis/demand-forecasting" className="text-primary hover:underline">Demand Forecasting page</a>.
+					</p>
+				</div>
+			</div>
+
 			{/* Technologies */}
 			<div className="bg-white rounded-lg shadow-lg p-8">
 				<h2 className="text-2xl font-bold text-gray-900 mb-4">Technologies & Tools</h2>
@@ -137,6 +159,7 @@ export default function MethodologyPage() {
 							<ul className="list-disc pl-6">
 								<li>Python 3.x</li>
 								<li>pandas (data manipulation)</li>
+								<li>NumPy (numerical operations)</li>
 								<li>Jupyter notebooks (exploratory analysis)</li>
 							</ul>
 						</div>
@@ -151,7 +174,7 @@ export default function MethodologyPage() {
 						<div>
 							<h3 className="text-xl font-semibold text-gray-900 mb-3">Web Application</h3>
 							<ul className="list-disc pl-6">
-								<li>Next.js 14 (React framework)</li>
+								<li>Next.js 15 (React framework)</li>
 								<li>TypeScript</li>
 								<li>TailwindCSS (styling)</li>
 							</ul>
@@ -162,6 +185,21 @@ export default function MethodologyPage() {
 								<li>FastAPI (Python web framework)</li>
 								<li>RESTful API design</li>
 								<li>GBFS API integration</li>
+							</ul>
+						</div>
+						<div>
+							<h3 className="text-xl font-semibold text-gray-900 mb-3">Machine Learning</h3>
+							<ul className="list-disc pl-6">
+								<li>scikit-learn (Linear Regression, Random Forest)</li>
+								<li>XGBoost (gradient boosting)</li>
+							</ul>
+						</div>
+						<div>
+							<h3 className="text-xl font-semibold text-gray-900 mb-3">Deployment</h3>
+							<ul className="list-disc pl-6">
+								<li>Vercel (frontend hosting)</li>
+								<li>Railway (backend hosting)</li>
+								<li>Cloudflare (DNS management)</li>
 							</ul>
 						</div>
 					</div>
