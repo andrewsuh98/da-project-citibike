@@ -10,7 +10,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -44,3 +43,9 @@ Thumbs.db
 # Data files - ignore all contents in data/ directory
 data/*
 !data/.gitkeep
+
+# environment variables
+.env
+
+# claude settings
+.claude/
