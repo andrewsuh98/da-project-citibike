@@ -75,7 +75,7 @@ export default async function Home() {
 				<div className="bg-white rounded-lg shadow-lg p-8">
 					<h2 className="text-2xl font-bold text-gray-900 mb-4">Historical Analysis</h2>
 					<p className="text-gray-700 mb-4">
-						Comprehensive analysis of {summaryStats.total_trips.toLocaleString()} trips from Jan 2024 to Oct 2025.
+						Comprehensive analysis of {summaryStats.total_trips.toLocaleString()} trips from Jan 2024 to Oct 2025, exploring usage patterns and trends.
 					</p>
 					<ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
 						<li>Temporal patterns (hourly, daily, seasonal)</li>
@@ -95,7 +95,7 @@ export default async function Home() {
 				<div className="bg-white rounded-lg shadow-lg p-8">
 					<h2 className="text-2xl font-bold text-gray-900 mb-4">Demand Forecasting</h2>
 					<p className="text-gray-700 mb-4">
-						XGBoost model predicting hourly bike demand for proactive station rebalancing.
+						XGBoost model predicting hourly bike demand for proactive station rebalancing and operational planning.
 					</p>
 					<ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
 						<li>R² = 0.722, MAE = 1.63 departures/hour</li>
@@ -115,7 +115,7 @@ export default async function Home() {
 				<div className="bg-white rounded-lg shadow-lg p-8">
 					<h2 className="text-2xl font-bold text-gray-900 mb-4">Live Station Status</h2>
 					<p className="text-gray-700 mb-4">
-						Real-time availability data for all 7 Columbia area stations, updated every 3 minutes.
+						Real-time availability data for all 7 Columbia area stations, updated every 3 minutes with interactive maps.
 					</p>
 					<ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
 						<li>Current bike availability (classic & e-bike)</li>
@@ -135,7 +135,7 @@ export default async function Home() {
 				<div className="bg-white rounded-lg shadow-lg p-8">
 					<h2 className="text-2xl font-bold text-gray-900 mb-4">Methodology</h2>
 					<p className="text-gray-700 mb-4">
-						Comprehensive data analysis using Citi Bike System Data from {summaryStats.date_range.start} to {summaryStats.date_range.end}.
+						Comprehensive data analysis using Citi Bike System Data from Jan 2024 to Oct 2025, analyzing station usage and rider behavior.
 					</p>
 					<ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
 						<li>529,908 trips filtered for Columbia area</li>
