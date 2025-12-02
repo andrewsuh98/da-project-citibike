@@ -4,11 +4,8 @@ export default function AboutPage() {
 			{/* Page Header */}
 			<div className="text-center mb-12">
 				<h1 className="text-4xl font-bold text-gray-900 mb-4">About the Project</h1>
-				<p className="text-xl text-gray-600 max-w-3xl mx-auto mb-2">
+				<p className="text-xl text-gray-600 max-w-3xl mx-auto">
 					A data analysis project studying Citi Bike usage patterns around Columbia University
-				</p>
-				<p className="text-lg text-gray-500">
-					Columbia IEOR - Data Analytics Course
 				</p>
 			</div>
 
@@ -98,16 +95,22 @@ export default function AboutPage() {
 				<h2 className="text-2xl font-bold text-gray-900 mb-4">Project Information</h2>
 				<div className="prose max-w-none text-gray-700">
 					<p className="mb-4">
-						This project analyzes Citi Bike usage patterns around Columbia University,
-						covering 529,908 trips from January 2024 to October 2025 across 7 stations
-						in the Morningside Heights and Manhattanville area.
+						This project was completed for <strong>IEOR 4523: Data Analytics</strong> at Columbia University (Fall 2025).
+						The objective was to perform comprehensive data analysis on a real-world dataset and develop predictive models
+						to extract actionable insights.
 					</p>
 					<p className="mb-4">
-						<strong>Technologies Used:</strong> Python (pandas, plotly), Next.js, React,
+						We analyzed Citi Bike usage patterns around Columbia University, examining 529,908 trips from January 2024
+						to October 2025 across 7 stations in the Morningside Heights and Manhattanville area. Our analysis includes
+						temporal pattern exploration, user behavior insights, and an XGBoost machine learning model for hourly demand
+						forecasting (R² = 0.722).
+					</p>
+					<p className="mb-4">
+						<strong>Technologies Used:</strong> Python (pandas, NumPy, plotly, scikit-learn, XGBoost), Next.js, React,
 						FastAPI, TypeScript, TailwindCSS, deck.gl, MapLibre
 					</p>
 					<p>
-						<strong>Data Sources:</strong> Citi Bike System Data (historical CSV files)
+						<strong>Data Sources:</strong> Citi Bike System Data (publicly available historical CSV files)
 						and GBFS API (real-time station status)
 					</p>
 				</div>
