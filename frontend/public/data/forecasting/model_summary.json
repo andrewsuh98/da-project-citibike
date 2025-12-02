@@ -1,0 +1,16 @@
+{
+  "best_model": "XGBoost - Departures",
+  "mae": 1.63,
+  "rmse": 2.363,
+  "r2": 0.722,
+  "total_trips": 529908,
+  "stations": 7,
+  "date_range": {
+    "start": "2024-01-01",
+    "end": "2025-10-31"
+  },
+  "test_mean_departures": 4.01,
+  "features_used": 27,
+  "train_samples": 80521,
+  "test_samples": 4291
+}

@@ -38,3 +38,20 @@ export interface PlotlyData {
   data: PlotParams['data'];
   layout: PlotParams['layout'];
 }
+
+export interface ModelSummary {
+  best_model: string;
+  mae: number;
+  rmse: number;
+  r2: number;
+  total_trips: number;
+  stations: number;
+  date_range: {
+    start: string;
+    end: string;
+  };
+  test_mean_departures: number;
+  features_used: number;
+  train_samples: number;
+  test_samples: number;
+}
