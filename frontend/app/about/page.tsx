@@ -16,7 +16,7 @@ export default function AboutPage() {
 					{/* Afroditi Fragkiadaki */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
 						<img
-							src="https://media.licdn.com/dms/image/v2/D4D03AQEKx7ZXcCxOsA/profile-displayphoto-crop_800_800/B4DZnQAZ5sKQAI-/0/1760131391909?e=1765411200&v=beta&t=fiY8Zk_OSVBqIlXlKWlRy88KI5IlMfWqX444Focn53E"
+							src="/photos/Afroditi.jpeg"
 							alt="Afroditi Fragkiadaki"
 							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
 						/>
@@ -31,7 +31,7 @@ export default function AboutPage() {
 					{/* Andrew Suh */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
 						<img
-							src="https://media.licdn.com/dms/image/v2/D4E03AQF2pUvxIdmfXA/profile-displayphoto-crop_800_800/B4EZmc8oa6HoAI-/0/1759274764279?e=1765411200&v=beta&t=lumsewJRmlYOrzkCM-8UIEKwz9pbz_84OURyBv0uSrU"
+							src="/photos/Andrew.jpeg"
 							alt="Andrew Suh"
 							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
 						/>
@@ -46,7 +46,7 @@ export default function AboutPage() {
 					{/* Naiyapak Boondee */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
 						<img
-							src="https://media.licdn.com/dms/image/v2/D5603AQFZaXqSUcZ40A/profile-displayphoto-crop_800_800/B56ZnP2VMfG0AI-/0/1760128752618?e=1765411200&v=beta&t=2JyUJt6UzEhNC8i8RzUP18B4qT6d-WMBgnwC3-hnTKs"
+							src="/photos/Eve.jpeg"
 							alt="Naiyapak Boondee"
 							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
 						/>
@@ -61,7 +61,7 @@ export default function AboutPage() {
 					{/* Zhesan Liu */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
 						<img
-							src="https://media.licdn.com/dms/image/v2/D5635AQF9w03QaA-8oA/profile-framedphoto-shrink_800_800/B56Zc1V4zCHoAg-/0/1748946619900?e=1765310400&v=beta&t=lMs580u8U1irLPqkn-ZKb-JbP5GsxI7uZ5tiq3O34Xc"
+							src="/photos/Zhesan.jpeg"
 							alt="Zhesan Liu"
 							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
 						/>
@@ -76,7 +76,7 @@ export default function AboutPage() {
 					{/* Zicheng Ni */}
 					<div className="bg-gray-50 rounded-lg p-6 text-center">
 						<img
-							src="https://media.licdn.com/dms/image/v2/D4E35AQFOca-0JpnrbA/profile-framedphoto-shrink_800_800/B4EZouWcaoKkAg-/0/1761714227111?e=1765310400&v=beta&t=c7b2nQEU7whZHDnsMbqHL_5corOqg2eZYzgOc5b-Iq8"
+							src="/photos/Zicheng.jpeg"
 							alt="Zicheng Ni"
 							className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
 						/>
